@@ -9,7 +9,7 @@
 //
 //
 #include <iostream>
-#include <SDL\SDL.h>
+#include "SDL.h"
 #include "Window.h"
 #include "Bitmap.h"
 #include "ErrorReport.h"

@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 #include <string>
-#include <SDL\SDL.h>
+#include "SDL.h"
 class ErrorReport
 {
 public:
