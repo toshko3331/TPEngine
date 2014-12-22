@@ -1,7 +1,6 @@
 #include "Bitmap.h"
 #include <iostream>
-#include "SDL.h"
-
+#include "OSSpecificDefine.h"
 
 Bitmap::Bitmap(int width,int height) : m_width(width), 	m_height(height)
 {

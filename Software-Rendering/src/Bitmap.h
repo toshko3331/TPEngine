@@ -1,5 +1,5 @@
 #pragma once
-#include "SDL.h"
+#include "OSSpecificDefine.h"
 class Bitmap
 {
 	public:

@@ -1,5 +1,5 @@
 #pragma once
-#include "SDL.h"
+#include "OSSpecificDefine.h"
 #include <string>
 #include "ErrorReport.h"
 class Window

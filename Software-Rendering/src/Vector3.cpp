@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include "OSSpecificDefine.h"
 #include "Vector3.h"
 
 Vector3::Vector3(Uint32 x,Uint32 y,Uint32 z) : m_x(x), m_y(y), m_z(z)
