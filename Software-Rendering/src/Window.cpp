@@ -1,6 +1,8 @@
 #include "Window.h"
 #include <string>
 #include "ErrorReport.h"
+#include "OSSpecificDefine.h"
+
 Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags) : m_windowWidth(width), m_windowHeight(height)
 {
 	////////////////////////////////Basic intialziation stuff, sets up a window, then a renderer and a texture so it can be drawn on.////////////////////////////////////
