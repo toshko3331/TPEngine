@@ -1,3 +1,4 @@
+#pragma once
 #ifndef WIN32
 #include "SDL.h"
 #endif
