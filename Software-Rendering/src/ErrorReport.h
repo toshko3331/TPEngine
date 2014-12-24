@@ -2,7 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "OSSpecificDefine.h"
+#include "HeadersInclude.h"
+
 
 class ErrorReport
 {

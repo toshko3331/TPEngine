@@ -1,7 +1,5 @@
-#include "Window.h"
 #include <string>
-#include "ErrorReport.h"
-#include "OSSpecificDefine.h"
+#include "HeadersInclude.h" 
 
 Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags) : m_windowWidth(width), m_windowHeight(height)
 {

@@ -9,11 +9,7 @@
 //
 //
 #include <iostream>
-#include "OSSpecificDefine.h"
-#include "Window.h"
-#include "Bitmap.h"
-#include "ErrorReport.h"
-
+#include "HeadersInclude.h"
 #define WIDTH 1600
 #define HEIGHT 900
 

@@ -1,5 +1,7 @@
 #pragma once
-#include "OSSpecificDefine.h"
+#include "HeadersInclude.h"
+
+
 class Bitmap
 {
 	public:

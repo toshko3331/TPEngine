@@ -1,7 +1,8 @@
 #pragma once
-#include "OSSpecificDefine.h"
+#include "HeadersInclude.h"
 #include <string>
-#include "ErrorReport.h"
+
+
 class Window
 {
 
