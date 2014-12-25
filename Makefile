@@ -5,14 +5,15 @@ CFLAGS = -g -Wall
 
 #Directory to source files
 SRC = $(shell pwd)/Software-Rendering/src/
-H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3.h $(SRC)Window.h $(SRC)Vector4f.h
-CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Main.cpp 
+H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)MainRendering.h
+CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)MainRendering.cpp $(SRC)Main.cpp 
 #Directory to include
 INCLUDE = $(shell sdl2-config --cflags)
 #Linking Directories
 LDFLAGS = $(shell sdl2-config --libs)
 
-OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o
+OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o
+
 
 all:$(OUT)
 #Linking all the files.
@@ -35,7 +36,11 @@ $(BUILD_DIR)Window.o:$(SRC)Window.cpp $(SRC)Window.h
 $(BUILD_DIR)Vector4f.o:$(SRC)Vector4f.cpp $(SRC)Vector4f.h
 	$(CXX) -c $(SRC)Vector4f.cpp $(INCLUDE) -o $(BUILD_DIR)Vector4f.o 
 
+$(BUILD_DIR)Vertex.o:$(SRC)Vertex.cpp $(SRC)Vertex.h
+	$(CXX) -c $(SRC)Vertex.cpp $(INCLUDE) -o $(BUILD_DIR)Vertex.o
 
+$(BUILD_DIR)Rasterizer.o:$(SRC)Rasterizer.cpp $(SRC)Rasterizer.h
+	$(CXX) -c $(SRC)Rasterizer.cpp $(INCLUDE) -o $(BUILD_DIR)Rasterizer.o
 
 #All of the clean up stuff below
 clean:
