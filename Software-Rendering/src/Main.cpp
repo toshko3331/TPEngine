@@ -70,10 +70,8 @@ int main(int argc, char ** argv)
    	 }
 
     SDL_DestroyTexture(window.GetTexture());
-    ErrorReport::WriteToLog("DestroyWindow");
     SDL_DestroyRenderer(window.GetRenderer());
     SDL_DestroyWindow(window.GetWindow());
-    SDL_Quit();
-    ErrorReport::WriteToLog("DestroyWindow");
+    SDL_Quit(); 
     return 0;
 }
