@@ -11,3 +11,6 @@
 #include "Vector3.h"
 #include "Vector4f.h"
 #include "Window.h"
+#include "Vertex.h"
+#include "Rasterizer.h"	 
+
