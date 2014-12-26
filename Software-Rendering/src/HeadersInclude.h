@@ -1,4 +1,6 @@
 #pragma once
+#ifndef HEADERS_INCLUDE
+#define HEADERS_INCLUDE
 #ifndef WIN32
 #include "SDL.h"
 #endif
@@ -9,8 +11,11 @@
 #include "Bitmap.h"
 #include "ErrorReport.h"
 #include "Vector3.h"
+#include "Vector2f.h"
 #include "Vector4f.h"
 #include "Window.h"
 #include "Vertex.h"
+#include "Edge.h"
 #include "Rasterizer.h"	 
-
+#include "Vector2f.h"
+#endif
