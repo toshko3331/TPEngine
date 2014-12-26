@@ -12,12 +12,12 @@ class Vector4f{
 		Vector4f operator*(const Vector4f& multVec);
 		Vector4f operator*(const float scalar);
 		//Getters for all of the variables.
-
 		float GetX() {return m_x;}
 		float GetY() {return m_y;}
 		float GetZ() {return m_z;}
 		float GetW() {return m_w;}
-
+		//Methods
+		Vector4f GetNormal(Vector4f firstVector,Vector4f secondVector);	
 	private:
 		float m_x;
 		float m_y;

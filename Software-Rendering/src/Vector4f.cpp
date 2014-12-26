@@ -37,3 +37,8 @@ Vector4f Vector4f::operator*(const float scalar)
 {
 	return Vector4f(m_x*scalar , m_y*scalar , m_z*scalar , m_w*scalar) ;
 }
+
+Vector4f Vector4f::GetNormal(Vector4f firstVector,Vector4f secondVector)
+{
+	return firstVector * secondVector;
+}
