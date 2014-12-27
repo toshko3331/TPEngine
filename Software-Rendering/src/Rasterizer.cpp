@@ -85,7 +85,7 @@ void Rasterizer::RightLongestEdge(Edge left,Edge right,bool secondTriangle,Vecto
 	
 	for(int currentY = yBegin;currentY < yEnd;currentY++)
 	{
-		DrawScanLine(left,right,currentY,color);	
+		RasterizeHorizontalLine(left,right,currentY,color);	
 		left.Step();
 		right.Step();
 	}	
@@ -113,7 +113,7 @@ void Rasterizer::LeftLongestEdge(Edge left,Edge right,bool secondTriangle,Vector
 	}
 	for(int currentY = yBegin;currentY < yEnd;currentY++)
 	{
-		DrawScanLine(left,right,currentY,color);	
+		RasterizeHorizontalLine(left,right,currentY,color);	
 		//Increment our values so we can step along the edge.
 		left.Step();
 		right.Step();
