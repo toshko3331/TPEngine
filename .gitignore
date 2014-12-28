@@ -6,6 +6,8 @@
 *.user
 *.sln.docstates
 *.TPEngineLog
+*.swp
+*.swo
 
 # Build results
 [Dd]ebug/
