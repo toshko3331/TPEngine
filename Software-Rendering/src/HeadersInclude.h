@@ -18,4 +18,5 @@
 #include "Edge.h"
 #include "Rasterizer.h"	 
 #include "Vector2f.h"
+#include "Matrix4f.h"
 #endif
