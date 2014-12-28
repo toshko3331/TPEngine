@@ -10,8 +10,14 @@ class Matrix4f
 		Matrix4f operator*(const float scalar);
 		Matrix4f operator*(Matrix4f matrix2);
 		Vector4f operator*(Vector4f vector);
+		
 		//Getters
 		float Get(short column, short row){return m_matrix[column][row];}
+		//Method
+		void Scale(Vector3f vector);
+		void RotateAroundX(float angleInDegrees);
+		void RotateAroundY(float angleInDegrees);
+		void RotateAroundZ(float angleInDegrees);
 	private:
 		float m_matrix[4][4];
 };
