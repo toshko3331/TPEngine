@@ -5,14 +5,14 @@ CFLAGS = -g -Wall
 
 #Directory to source files
 SRC = $(shell pwd)/Software-Rendering/src/
-H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h
-CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp
+H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h
+CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp
 #Directory to include
 INCLUDE = $(shell sdl2-config --cflags)
 #Linking Directories
 LDFLAGS = $(shell sdl2-config --libs)
 
-OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o $(BUILD_DIR)Edge.o $(BUILD_DIR)Vector2f.o $(BUILD_DIR)Matrix4f.o
+OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3f.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o $(BUILD_DIR)Edge.o $(BUILD_DIR)Vector2f.o $(BUILD_DIR)Matrix4f.o
 
 
 all:$(OUT)
@@ -24,8 +24,8 @@ $(OUT):$(OBJECTS)
 $(BUILD_DIR)Main.o:$(SRC)Main.cpp
 	$(CXX) -c $(SRC)Main.cpp $(INCLUDE) -o $(BUILD_DIR)Main.o 
 
-$(BUILD_DIR)Vector3.o:$(SRC)Vector3.cpp $(SRC)Vector3.h
-	$(CXX) -c $(SRC)Vector3.cpp $(INCLUDE) -o $(BUILD_DIR)Vector3.o 
+$(BUILD_DIR)Vector3f.o:$(SRC)Vector3f.cpp $(SRC)Vector3f.h
+	$(CXX) -c $(SRC)Vector3f.cpp $(INCLUDE) -o $(BUILD_DIR)Vector3f.o 
 
 $(BUILD_DIR)Bitmap.o:$(SRC)Bitmap.cpp $(SRC)Bitmap.h
 	$(CXX) -c $(SRC)Bitmap.cpp $(INCLUDE) -o $(BUILD_DIR)Bitmap.o 
