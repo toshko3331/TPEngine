@@ -149,7 +149,7 @@ Matrix4f Matrix4f::PerspectiveProjection(int fov,float aspectRatio,float zNear,f
 	perspectiveMatrix.Set(0,0,1/(halfFOVTan * aspectRatio));
 	perspectiveMatrix.Set(1,1,1/halfFOVTan);
 	perspectiveMatrix.Set(2,2,-1 * ((zFar + zNear) / zRange));
-	perspectiveMatrix.Set(2,3, -1);
+	perspectiveMatrix.Set(2,3,-1);
 	perspectiveMatrix.Set(3,2,-1 * (2 * (zNear * zFar) /zRange));
 
 	return (*this) * perspectiveMatrix;
