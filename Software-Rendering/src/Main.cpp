@@ -26,9 +26,9 @@ int main(int argc, char ** argv)
 	bool quit = false;
 	SDL_Event event;
 	//// Temporary Variables for Testing Code  ///	
-	Vertex v1 = Vertex(Vector4f(0,HEIGHT,0,0));
-	Vertex v2 = Vertex(Vector4f(WIDTH/2,0,0,0));
-	Vertex v3 = Vertex(Vector4f(WIDTH,HEIGHT,0,0));
+	Vertex v1 = Vertex(Vector4f(0,0.25,1,1));
+	Vertex v2 = Vertex(Vector4f(-0.25,-0.25,1,1));
+	Vertex v3 = Vertex(Vector4f(0.25,-0.25,1,1));
 	int i = 0;
 	srand(time(NULL));
 	//// End of Temporary Variables ////	
@@ -43,22 +43,12 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		//Just some test code for the triangle rasterization.		
-		if(i < 1000)
-		{
-			v1 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-			v2 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-			v3 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-
-			//rasterizer.RasterizeTriangle(v1,v2,v3);
-			Vector3f translation = Vector3f(1.5,1.0,1.5);
-			Matrix4f matrix = Matrix4f().InitializeIdentity().Translate(translation).RotateAroundX(180).RotateAroundY(90);
-			matrix.PrintMatrixToConsole();
+		///	v1 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
+		///	v2 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
+		///	v3 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
 			
-		}
-		else
-		{
-			quit = true;
-		}
+			Matrix4f rotationMatrix = Matrix4f().InitializeIdentity().RotateAroundX(0.5 * i).RotateAroundY(0.5 * i).RotateAroundZ(0.5 * i);
+			rasterizer.RasterizeTriangle(v1.ApplyTransformations(rotationMatrix),v2.ApplyTransformations(rotationMatrix),v3.ApplyTransformations(rotationMatrix));
 		i++;	
 
 		//End of test code.
