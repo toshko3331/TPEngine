@@ -102,7 +102,8 @@ Matrix4f Matrix4f::RotateAroundX(float angleInDegrees)
 	float sinOfAngle = sin(angleInRadians);
 
 	Matrix4f rotatedMatrix = Matrix4f().InitializeIdentity();
-	//Set the rotation matracies to the needed values 
+		
+	//Set the rotation matracies to the values that are needed to rotate around the X Axis.  
 	rotatedMatrix.Set(1,1,cosOfAngle);	rotatedMatrix.Set(2,1,-sinOfAngle);
 	rotatedMatrix.Set(1,2,sinOfAngle);	rotatedMatrix.Set(2,2,cosOfAngle);
 	return ((*this) * rotatedMatrix);
@@ -117,7 +118,7 @@ Matrix4f Matrix4f::RotateAroundY(float angleInDegrees)
 
 	Matrix4f rotatedMatrix = Matrix4f().InitializeIdentity();
 	
-	//Set the rotation matracies to the needed values 
+	//Set the rotation matracies to the values that are needed to rotate around the Y Axis.  
 	rotatedMatrix.Set(0,0,cosOfAngle);	rotatedMatrix.Set(2,0,sinOfAngle);
 	rotatedMatrix.Set(0,2,-sinOfAngle);	rotatedMatrix.Set(2,2,cosOfAngle);
 	
@@ -131,12 +132,31 @@ Matrix4f Matrix4f::RotateAroundZ(float angleInDegrees)
 	float sinOfAngle = sin(angleInRadians);
 
 	Matrix4f rotatedMatrix = Matrix4f().InitializeIdentity();
-	//Set the rotation matracies to the needed values 
+	//Set the rotation matracies to the values that are needed to rotate around the Z Axis.  
 	rotatedMatrix.Set(0,0,cosOfAngle);	rotatedMatrix.Set(1,0,-sinOfAngle);
 	rotatedMatrix.Set(0,1,sinOfAngle);	rotatedMatrix.Set(1,1,cosOfAngle);
 	
 	return ((*this) * rotatedMatrix);
 }
+/*
+Matrix4f Matrix4f::PerspectiveProjection(int fov,)
+{
+		
+}
+*/
+Matrix4f Matrix4f::OrthographicProjection(int width, int height, float zFar, float zNear)
+{
+	
+	zRange = zFar -zNear;
+	
+	Matrix4f orthographicMatrix = Matrix4f().InitializeIdentity();
+	
+	orthographicMatrix.Set(0,0,1/width);	orthographicMatrix.Set(1,1,1/height);
+	orthographicMatrix.Set(2,2,-2/zRange);	orthographicMatrix.Set(3,2,-1 * ((zFar+zNear)/zRange));
+
+	return (*this) * orthographicMatrix;
+}
+
 float** Matrix4f::GetMatrix()
 {
 	float** matrix = new float*[4];// = new float*;
