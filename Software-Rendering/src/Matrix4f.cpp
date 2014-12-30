@@ -63,16 +63,16 @@ Matrix4f Matrix4f::operator*(const Matrix4f matrix2)
 	(m_matrix[0][3] * matrix2.Get(3,0)) + (m_matrix[1][3] * matrix2.Get(3,1)) + (m_matrix[2][3] * matrix2.Get(3,2)) + (m_matrix[3][3] * matrix2.Get(3,3))
 	);
 }
-/* This might be wrong, going to fix it later.
+
 Vector4f Matrix4f::operator*(Vector4f vector)
 {
-	return Vector4f( (m_matrix[0][0] * vector.GetX()) + (m_matrix[0][1] * vector.GetY()) + (m_matrix[0][2] * vector.GetZ()) + (m_matrix[0][3] * vector.GetW()),
-			 (m_matrix[1][0] * vector.GetX()) + (m_matrix[1][1] * vector.GetY()) + (m_matrix[1][2] * vector.GetZ()) + (m_matrix[1][3] * vector.GetW()),
-			 (m_matrix[2][0] * vector.GetX()) + (m_matrix[2][1] * vector.GetY()) + (m_matrix[2][2] * vector.GetZ()) + (m_matrix[2][3] * vector.GetW()),
-			 (m_matrix[3][0] * vector.GetX()) + (m_matrix[3][1] * vector.GetY()) + (m_matrix[3][2] * vector.GetZ()) + (m_matrix[3][3] * vector.GetW())
+	return Vector4f( (m_matrix[0][0] * vector.GetX()) + (m_matrix[1][0] * vector.GetY()) + (m_matrix[2][0] * vector.GetZ()) + (m_matrix[3][0] * vector.GetW()),
+			 (m_matrix[0][1] * vector.GetX()) + (m_matrix[1][1] * vector.GetY()) + (m_matrix[2][1] * vector.GetZ()) + (m_matrix[3][1] * vector.GetW()),
+			 (m_matrix[0][2] * vector.GetX()) + (m_matrix[1][2] * vector.GetY()) + (m_matrix[2][2] * vector.GetZ()) + (m_matrix[3][2] * vector.GetW()),
+			 (m_matrix[0][3] * vector.GetX()) + (m_matrix[1][3] * vector.GetY()) + (m_matrix[2][3] * vector.GetZ()) + (m_matrix[3][3] * vector.GetW())
 			 );
 }
-*/
+
 Matrix4f Matrix4f::Translate(Vector3f vector)
 {
 	Matrix4f translatedMatrix = Matrix4f().InitializeIdentity(); 
@@ -168,6 +168,19 @@ Matrix4f Matrix4f::OrthographicProjection(int width, int height, float zFar, flo
 	return (*this) * orthographicMatrix;
 }
 
+Matrix4f Matrix4f::WorldSpaceToScreenSpace(float halfWidth,float halfHeight)
+{
+
+	Matrix4f screenMatrix = Matrix4f().InitializeIdentity();
+
+	screenMatrix.Set(0,0,halfWidth);
+	screenMatrix.Set(1,1,-halfHeight);
+	screenMatrix.Set(3,0,halfWidth - 0.5);
+	screenMatrix.Set(3,1,halfHeight - 0.5);
+
+	return (*this) * screenMatrix;
+}
+
 float** Matrix4f::GetMatrix()
 {
 	float** matrix = new float*[4];// = new float*;
@@ -204,7 +217,7 @@ void Matrix4f::Set(int column,int row,float value)
 	m_matrix[column][row] = value;
 }
 
-void Matrix4f::PrintMatrixToConsole()
+void Matrix4f::PrintToConsole()
 {
 	std::cout << "--- "	<< 		     "\t"  <<		       "\t" 		    <<   "\t"		        << "---" << std::endl;
 	std::cout << "| "	<< m_matrix[0][0] << "\t" << m_matrix[1][0] << "\t" << m_matrix[2][0] << "\t" << m_matrix[3][0] << "  |" << std::endl;

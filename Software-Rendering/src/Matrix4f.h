@@ -9,7 +9,7 @@ class Matrix4f
 		//Operator overloading
 		Matrix4f operator*(const float scalar);
 		Matrix4f operator*(const Matrix4f matrix2);
-		//Vector4f operator*(Vector4f vector); Might be wrong, check later.
+		Vector4f operator*(Vector4f vector);
 		
 		//Getters
 		float Get(int column,int row) const {return m_matrix[column][row];} 
@@ -22,7 +22,8 @@ class Matrix4f
 		Matrix4f RotateAroundZ(float angleInDegrees);
 		Matrix4f PerspectiveProjection(int fov,float aspectRatio, float zNear,float zFar);
 		Matrix4f OrthographicProjection(int width, int height, float zFar, float zNear);
-		void PrintMatrixToConsole();	
+		Matrix4f WorldSpaceToScreenSpace(float halfWidth,float halfHeight);
+		void PrintToConsole();	
 		private:
 		float** GetMatrix(); // This function might be obsolete.
 		void Set(int column,int row,float value);
