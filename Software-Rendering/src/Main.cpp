@@ -2,6 +2,7 @@
 #include "HeadersInclude.h"
 //Temporary include calls
 #include <time.h>
+#include <math.h>
 //End of temporary include calls
 
 #define WIDTH 1200 
@@ -48,13 +49,18 @@ int main(int argc, char ** argv)
 			v2 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
 			v3 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
 
-			rasterizer.RasterizeTriangle(v1,v2,v3);
+			//rasterizer.RasterizeTriangle(v1,v2,v3);
+			Vector3f translation = Vector3f(1.5,1.0,1.5);
+			Matrix4f matrix = Matrix4f().InitializeIdentity().Translate(translation).RotateAroundX(180).RotateAroundY(90);
+			matrix.PrintMatrixToConsole();
+			
 		}
 		else
 		{
 			quit = true;
 		}
 		i++;	
+
 		//End of test code.
 		//1.Events
 		while(SDL_PollEvent(&event))
