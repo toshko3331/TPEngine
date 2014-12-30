@@ -138,16 +138,27 @@ Matrix4f Matrix4f::RotateAroundZ(float angleInDegrees)
 	
 	return ((*this) * rotatedMatrix);
 }
-/*
-Matrix4f Matrix4f::PerspectiveProjection(int fov,)
+
+Matrix4f Matrix4f::PerspectiveProjection(int fov,int aspectRatio,float zNear,float zFar)
 {
-		
+	float halfFOVTan = tan( (fov/2) );
+	float zRange = zNear - zFar;
+	
+	Matrix4f perspectiveMatrix = Matrix4f().InitializeIdentity();
+
+	perspectiveMatrix.Set(0,0,1/(halfFOVTan * aspectRatio));
+	perspectiveMatrix.Set(1,1,1/halfFOVTan);
+	perspectiveMatrix.Set(2,2,-1 * ((zFar + zNear) / zRange));
+	perspectiveMatrix.Set(2,3, -1);
+	perspectiveMatrix.Set(3,2,-1 * (2 * (zNear * zFar) /zRange);
+
+	return (*this) * perspectiveMatrix;
 }
-*/
+
 Matrix4f Matrix4f::OrthographicProjection(int width, int height, float zFar, float zNear)
 {
 	
-	zRange = zFar -zNear;
+	float	zRange = zFar -zNear;
 	
 	Matrix4f orthographicMatrix = Matrix4f().InitializeIdentity();
 	
