@@ -7,7 +7,7 @@ class Vertex
 		Vertex(Vector4f vertex);
 		//Getters.
 		float GetX() { return m_x;}
-		float GettY() { return m_y;}
+		float GetY() { return m_y;}
 		float GetZ() { return m_z;}
 		float GetW() { return m_w;}
 		Vector4f GetVertex(){ return Vector4f(m_x,m_y,m_z,m_w);}
