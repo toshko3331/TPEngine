@@ -26,13 +26,18 @@ int main(int argc, char ** argv)
 	bool quit = false;
 	SDL_Event event;
 	//// Temporary Variables for Testing Code  ///	
-	Vertex v1 = Vertex(Vector4f(0,0.25,1,1));
-	Vertex v2 = Vertex(Vector4f(-0.25,-0.25,1,1));
-	Vertex v3 = Vertex(Vector4f(0.25,-0.25,1,1));
+	Vertex v1 = Vertex(Vector4f(0,1,0,1));
+	Vertex v2 = Vertex(Vector4f(-1,-1,0,1));
+	Vertex v3 = Vertex(Vector4f(1,-1,0,1));
 	int i = 0;
 	srand(time(NULL));
-	//// End of Temporary Variables ////	
+	
 	Rasterizer rasterizer = Rasterizer(&pixels);
+	Matrix4f projection = Matrix4f().InitializeIdentity().PerspectiveProjection(90,pixels.GetWidth()/pixels.GetHeight(),0.1,1000);
+	Matrix4f translation = Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3));
+	projection = projection * translation;
+	projection.PrintToConsole();
+	//// End of Temporary Variables ///
 	while (!quit)
 	{	
 
@@ -47,8 +52,12 @@ int main(int argc, char ** argv)
 		///	v2 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
 		///	v3 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
 			
-			Matrix4f rotationMatrix = Matrix4f().InitializeIdentity().RotateAroundX(0.5 * i).RotateAroundY(0.5 * i).RotateAroundZ(0.5 * i);
-			rasterizer.RasterizeTriangle(v1.ApplyTransformations(rotationMatrix),v2.ApplyTransformations(rotationMatrix),v3.ApplyTransformations(rotationMatrix));
+			Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(0.5 * i);
+			rotation = projection * rotation;
+			//projection.PrintToConsole();
+			pixels.Clear(128);		
+		
+			rasterizer.RasterizeTriangle(v1.ApplyTransformations(rotation),v2.ApplyTransformations(rotation),v3.ApplyTransformations(rotation));
 		i++;	
 
 		//End of test code.
