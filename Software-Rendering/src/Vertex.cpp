@@ -9,7 +9,7 @@ Vertex::Vertex(Vector4f vertex)
 
 Vertex Vertex::PerspectiveDivide()
 {
-	return Vertex(Vector4f(m_x/m_w,m_y/m_w,m_z/m_w,m_w));
+	return Vertex(Vector4f(m_x/m_w,m_y/m_w,m_z/m_w,m_w/m_w));
 }
 
 Vertex Vertex::ApplyTransformations(Matrix4f transformations)
