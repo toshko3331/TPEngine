@@ -12,11 +12,11 @@
 #include "ErrorReport.h"
 #include "Vector3f.h"
 #include "Vector2f.h"
-#include "Vector4f.h"
 #include "Window.h"
+#include "Vector4f.h"
+#include "Matrix4f.h"
 #include "Vertex.h"
 #include "Edge.h"
 #include "Rasterizer.h"	 
 #include "Vector2f.h"
-#include "Matrix4f.h"
 #endif
