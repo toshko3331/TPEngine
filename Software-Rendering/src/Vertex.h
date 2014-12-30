@@ -10,9 +10,12 @@ class Vertex
 		float GetY() { return m_y;}
 		float GetZ() { return m_z;}
 		float GetW() { return m_w;}
+		//Vector4f GetVertex(){ return m_vertex;}
 		Vector4f GetVertex(){ return Vector4f(m_x,m_y,m_z,m_w);}
 		//Methods
 		Vertex PerspectiveDivide();
+		Vertex ApplyTransformations(Matrix4f transformations);
+		void   PrintToConsole(bool withEndLineAppended);
 	private:
 		float m_x;
 		float m_y;
