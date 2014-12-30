@@ -20,7 +20,7 @@ class Matrix4f
 		Matrix4f RotateAroundX(float angleInDegrees);
 		Matrix4f RotateAroundY(float angleInDegrees);
 		Matrix4f RotateAroundZ(float angleInDegrees);
-		Matrix4f PerspectiveProjection(int fov, float zNear,float zFar);
+		Matrix4f PerspectiveProjection(int fov,float aspectRatio, float zNear,float zFar);
 		Matrix4f OrthographicProjection(int width, int height, float zFar, float zNear);
 		void PrintMatrixToConsole();	
 		private:
