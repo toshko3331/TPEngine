@@ -1,14 +1,14 @@
 BUILD_DIR = build/
-CXX = g++
+CXX = g++ 
 OUT = $(BUILD_DIR)Engine
-CFLAGS = -g -Wall
+CFLAGS = -std=c++11 -g -Wall
 
 #Directory to source files
 SRC = $(shell pwd)/Software-Rendering/src/
 H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h
 CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp
 #Directory to include
-INCLUDE = $(shell sdl2-config --cflags)
+INCLUDE = $(CFLAGS) $(shell sdl2-config --cflags)
 #Linking Directories
 LDFLAGS = $(shell sdl2-config --libs)
 
@@ -18,7 +18,7 @@ OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3f.o $(BUILD
 all:$(OUT)
 #Linking all the files.
 $(OUT):$(OBJECTS)
-	$(CXX) -o $@ $^ $(LDFLAGS) $(CFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS) 
 
 #Creating all object files below.
 $(BUILD_DIR)Main.o:$(SRC)Main.cpp
