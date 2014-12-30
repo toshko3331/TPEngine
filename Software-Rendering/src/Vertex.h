@@ -10,6 +10,9 @@ class Vertex
 		float GetY() { return m_y;}
 		float GetZ() { return m_z;}
 		float GetW() { return m_w;}
+		float GetVertex(){ return Vector4f(m_x,m_y,m_z,m_w);}
+		//Methods
+		Vertex PerspectiveDivide();
 	private:
 		float m_x;
 		float m_y;
