@@ -13,12 +13,13 @@ Rasterizer::Rasterizer(Bitmap* bitmap)
 
 void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 {
-	Matrix4f transformations = Matrix4f().InitializeIdentity().WorldSpaceToScreenSpace((m_bitmap->GetWidth())/2,(m_bitmap->GetHeight())/2);
 
+	Matrix4f transformations = Matrix4f().InitializeIdentity().WorldSpaceToScreenSpace((m_bitmap->GetWidth())/2,(m_bitmap->GetHeight())/2);	
+//	transformations.PrintToConsole();
 	minYVertex = minYVertex.ApplyTransformations(transformations).PerspectiveDivide();
 	midYVertex = midYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
 	maxYVertex = maxYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
-
+	minYVertex.PrintToConsole(true);
 	//Sorting the vertices.
 	 if(minYVertex.GetY() > midYVertex.GetY())
 	 {
@@ -45,7 +46,8 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	Edge topToMiddle = Edge(minYVertex,midYVertex);
 	Edge middleToBottom = Edge(midYVertex,maxYVertex);
 	//Test code for funzies. :P
-	Vector4f color = Vector4f(rand()%255,rand()%255,rand()%255,rand()%255);
+//	Vector4f color = Vector4f(rand()%255,rand()%255,rand()%255,rand()%255);
+	Vector4f color = Vector4f(0,0,0,0);
 	//End of test code.
 	//Check weather the longest side is on the right or left.
 	//This determines the function it is going to use to draw the specific triangle. 
