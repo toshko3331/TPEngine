@@ -139,7 +139,7 @@ Matrix4f Matrix4f::RotateAroundZ(float angleInDegrees)
 	return ((*this) * rotatedMatrix);
 }
 
-Matrix4f Matrix4f::PerspectiveProjection(int fov,int aspectRatio,float zNear,float zFar)
+Matrix4f Matrix4f::PerspectiveProjection(int fov,float aspectRatio,float zNear,float zFar)
 {
 	float halfFOVTan = tan( (fov/2) );
 	float zRange = zNear - zFar;
@@ -150,7 +150,7 @@ Matrix4f Matrix4f::PerspectiveProjection(int fov,int aspectRatio,float zNear,flo
 	perspectiveMatrix.Set(1,1,1/halfFOVTan);
 	perspectiveMatrix.Set(2,2,-1 * ((zFar + zNear) / zRange));
 	perspectiveMatrix.Set(2,3, -1);
-	perspectiveMatrix.Set(3,2,-1 * (2 * (zNear * zFar) /zRange);
+	perspectiveMatrix.Set(3,2,-1 * (2 * (zNear * zFar) /zRange));
 
 	return (*this) * perspectiveMatrix;
 }
