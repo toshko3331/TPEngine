@@ -15,11 +15,10 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 {
 
 	Matrix4f transformations = Matrix4f().InitializeIdentity().WorldSpaceToScreenSpace((m_bitmap->GetWidth())/2,(m_bitmap->GetHeight())/2);	
-//	transformations.PrintToConsole();
+	
 	minYVertex = minYVertex.ApplyTransformations(transformations).PerspectiveDivide();
 	midYVertex = midYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
 	maxYVertex = maxYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
-	minYVertex.PrintToConsole(true);
 	//Sorting the vertices.
 	 if(minYVertex.GetY() > midYVertex.GetY())
 	 {
