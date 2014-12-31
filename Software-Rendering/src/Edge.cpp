@@ -12,7 +12,7 @@ Edge::Edge(Vertex minYVertex,Vertex maxYVertex)
 	// This variable is created because we need to take into account the truncated
 	// values of each mathematical operation that converts float to an int.
 	// If we don't this can come and haunt us later in the program at unexpected times.
-	float yApproxFloatError = minYVertex.GetY() - m_yBegin; 
+	float yApproxFloatError = m_yBegin - minYVertex.GetY(); 
 	m_x = (m_reciprocalSlope * yApproxFloatError) + minYVertex.GetX();
 }
 
