@@ -2,6 +2,11 @@
 
 Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 {
+
+	m_minYVertex = &minYVertex;
+	m_midYVertex = &midYVertex;
+	m_maxYVertex = &maxYVertex;
+
 	m_oneOverZ[0] = 1.0f/minYVertex.GetW(); 
 	m_oneOverZ[1] = 1.0f/midYVertex.GetW(); 
 	m_oneOverZ[2] = 1.0f/maxYVertex.GetW(); 
@@ -16,36 +21,31 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 
 	//We need to calculate the dc'/dx and dc'/dy for each gradient. Since the U,V,and Z coordinates are our gradients, we need to that for all theree.
 	//Calculating the denominators for the gradients.
-	dX = ((midYVertex.GetX() - minYVertex.GetX()) * (minYVertex.GetY() - maxYVertex.GetY())) - 
+	float dX = ((midYVertex.GetX() - minYVertex.GetX()) * (minYVertex.GetY() - maxYVertex.GetY())) - 
 	     ((minYVertex.GetX() - maxYVertex.GetX()) * (midYVertex.GetY() - maxYVertex.GetY()));
-	dY = -dX;
 	
-	//Calculating all of the numerators here.
-	
-	oneOverZX = CalcStepX(m_oneOverZ);
-	oneOverZY = CalcStepY(m_oneOverZ);
+	float dY = -dX;
+	//Calculating all gradients below.
+	m_oneOverZX = CalcStepX(m_oneOverZ)/dX;
+	m_oneOverZY = CalcStepY(m_oneOverZ)/dY;
 
-	uOverZX = CalcStepX(m_oneOverZ);
-	uOverZY = CalcStepY(m_oneOverZ);
+	m_uOverZX = CalcStepX(m_oneOverZ)/dX;
+	m_uOverZY = CalcStepY(m_oneOverZ)/dY;
 	
-	vOverZX = CalcStepX(m_oneOverZ);	
-	vOverZY = CalcStepY(m_oneOverZ)
-	
-	//All the actual values.
-	//Maybe just do it in the above?
-	dOneOverZY =  
-	dVOverZ = 
-	dUOverZ = 
+	m_vOverZX = CalcStepX(m_oneOverZ)/dX;	
+	m_vOverZY = CalcStepY(m_oneOverZ)/dY;	
 }
 
-float CalcStepX(float* gradient)
+float Gradients::CalcStepX(float* gradient)
 {
-	return ((gradient[1] - gradient[2]) * (m_minYVertex.GetY() - m_maxYVertex.GetY())) - ((gradient[0] - gradient[2]) * (m_midYVertex.GetY() - m_maxYVertex.GetY()));
+	//Calculates the numerator for the X step of the gradient.
+	return ((gradient[1] - gradient[2]) * (m_minYVertex->GetY() - m_maxYVertex->GetY())) - ((gradient[0] - gradient[2]) * (m_midYVertex->GetY() - m_maxYVertex->GetY()));
 
 }
-float CalcStepY(float* gradient)
-{
-	return 	((gradient[1] - gradient[2]) * (m_minYVertex.GetX() - m_maxYVertex.GetX())) - ((gradient[0] - gradient[2]) * (m_midYVertex.GetX() - m_maxYVertex.GetX()));
+float Gradients::CalcStepY(float* gradient)
+{	
+	//Calculates the numerator for the Y step of the gradient.
+	return 	((gradient[1] - gradient[2]) * (m_minYVertex->GetX() - m_maxYVertex->GetX())) - ((gradient[0] - gradient[2]) * (m_midYVertex->GetX() - m_maxYVertex->GetX()));
 
 
 }
