@@ -27,16 +27,18 @@ int main(int argc, char ** argv)
 	bool quit = false;
 	SDL_Event event;
 	//// Temporary Variables for Testing Code  ///	
-	Vertex v1 = Vertex(Vector4f(0,1,0,1));
-	Vertex v2 = Vertex(Vector4f(-1,-1,0,1));
-	Vertex v3 = Vertex(Vector4f(1,-1,0,1));
+	Vertex v1 = Vertex(Vector4f(0,1,0,1),
+			Vector2f(0.5,1));
+	Vertex v2 = Vertex(Vector4f(-1,-1,0,1),
+			Vector2f(0,0));
+	Vertex v3 = Vertex(Vector4f(1,-1,0,1),
+			Vector2f(1,0));
 	srand(time(NULL));
 	
 	Rasterizer rasterizer = Rasterizer(&pixels);
 	Matrix4f projection = Matrix4f().InitializeIdentity().PerspectiveProjection(70,pixels.GetWidth()/pixels.GetHeight(),0.1,1000);
 	Matrix4f translation = Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3));
 	projection = projection * translation;
-	//projection.PrintToConsole();
 	//// End of Temporary Variables ///
 	
 	//Used for delta counter.
@@ -61,9 +63,9 @@ int main(int argc, char ** argv)
 				
 		Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(rotAmount * 0.09);
 		rotation = projection * rotation;
-		//projection.PrintToConsole();
+		
 		pixels.Clear(128);		
-	
+		
 		rasterizer.RasterizeTriangle(v1.ApplyTransformations(rotation),v2.ApplyTransformations(rotation),v3.ApplyTransformations(rotation));
 	
 		rotAmount = rotAmount + delta;
