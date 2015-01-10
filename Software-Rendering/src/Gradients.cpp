@@ -21,7 +21,7 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 
 	//We need to calculate the dc'/dx and dc'/dy for each gradient. Since the U,V,and Z coordinates are our gradients, we need to that for all theree.
 	//Calculating the denominators for the gradients.
-	float dX = ((midYVertex.GetX() - minYVertex.GetX()) * (minYVertex.GetY() - maxYVertex.GetY())) - 
+	float dX = ((midYVertex.GetX() - maxYVertex.GetX()) * (minYVertex.GetY() - maxYVertex.GetY())) - 
 	     ((minYVertex.GetX() - maxYVertex.GetX()) * (midYVertex.GetY() - maxYVertex.GetY()));
 	
 	float dY = -dX;
