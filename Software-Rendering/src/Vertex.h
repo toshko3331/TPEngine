@@ -17,6 +17,7 @@ class Vertex
 		Vertex PerspectiveDivide();
 		Vertex ApplyTransformations(Matrix4f transformations);
 		void   PrintToConsole(bool withEndLineAppended);
+		float  Normal(Vertex minYVertex,Vertex maxYVertex);	
 	private:
 		float m_x;
 		float m_y;

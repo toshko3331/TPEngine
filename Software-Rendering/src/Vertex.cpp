@@ -28,3 +28,8 @@ void Vertex::PrintToConsole(bool withEndLineAppended)
 	else
 		std::cout << "(" << m_x << "," << m_y << "," << m_z << "," << m_w << ")";
 }
+
+float Vertex::Normal(Vertex maxYVertex, Vertex minYVertex)
+{
+	return ((maxYVertex.GetX() - m_x) * (minYVertex.GetY() - m_y)) - ((minYVertex.GetX() - m_x) * (maxYVertex.GetY() - m_y));
+}
