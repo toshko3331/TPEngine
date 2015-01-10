@@ -44,87 +44,50 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	Edge topToBottom = Edge(minYVertex,maxYVertex);
 	Edge topToMiddle = Edge(minYVertex,midYVertex);
 	Edge middleToBottom = Edge(midYVertex,maxYVertex);
-	//Test code for funzies. :P
-//	Vector4f color = Vector4f(rand()%255,rand()%255,rand()%255,rand()%255);
-	Vector4f color = Vector4f(0,0,0,0);
-	//End of test code.
-	//Check weather the longest side is on the right or left.
-	//This determines the function it is going to use to draw the specific triangle. 
-	if(topToBottom.GetX() < middleToBottom.GetX())
-	{
-		//This function call is for drawing the top triangle.
-		LeftLongestEdge(topToBottom,topToMiddle,false,color);
-		//This function call is for drawing the bottom part of the triangle.
-		LeftLongestEdge(topToBottom,middleToBottom,true,color);
-	}
-	else
-	{
-		//This function call is for drawing the top triangle.
-		RightLongestEdge(topToMiddle,topToBottom,false,color);
-		//This function call is for drawing the bottom part of the triangle.
-		RightLongestEdge(middleToBottom,topToBottom,true,color);
-	}
+
+	bool rightOrLeft = minYVertex.Normal(maxYVertex,midYVertex) >= 0;
+
+	ScanEdges(topToBottom,topToMiddle,rightOrLeft,false);
+	ScanEdges(topToBottom,middleToBottom,rightOrLeft,true);
 }
 
-void Rasterizer::RightLongestEdge(Edge left,Edge right,bool secondTriangle,Vector4f color)
-{	
-	//yBegin = The point on the Y-Axis at which we are going to start drawing the triangle.
-	int yBegin = right.GetYStart();
-	//yEnd = The point on the Y-Axis at which we are going to stop drawing the triangle.
-	int yEnd = left.GetYEnd();
-	
-	//The algorithm is based on drawing the bottom and top triangles sepratly.
-	//It is necessary to do a few things different if it is drawing the bottom half of the triangle.
-	if(secondTriangle){
-		//Set the beginning of the y-axis to the appropriate value.
-		//This is done by simply getting the midYVertex's Y positon since that is the beginning
-		//of the bottom part of the triangle.
-		yBegin = left.GetYStart();
-		//Setting the proper y-axis end of the 2nd triangle.
-		yEnd = right.GetYEnd();
-		//Making sure that the x value of the longest side is stepped so it is
-		//at the position that starts the bottom part of the triangle.
-		for(int i = right.GetYStart();i < left.GetYStart();i++)
-		{
-			right.Step();	
-		}
-	}
-	
-	for(int currentY = yBegin;currentY < yEnd;currentY++)
-	{
-		RasterizeHorizontalLine(left,right,currentY,color);	
-		left.Step();
-		right.Step();
-	}	
-}
 
-void Rasterizer::LeftLongestEdge(Edge left,Edge right,bool secondTriangle,Vector4f color)
+void Rasterizer::ScanEdges(Edge first, Edge second, bool rightOrLeft,bool secondTriangle)
 {
-	
-	/*									*
-	 *	REFFER TO ABOVE FUNCTION FOR COMMENTS AND BRIEF EXPLANATIONS	*
-	 *									*/
-
-	int yBegin = left.GetYStart();
-	int yEnd = right.GetYEnd();
-	
-	if(secondTriangle)
+	Edge left = first;
+	Edge right = second;
+	if(rightOrLeft)
 	{
-		yBegin = right.GetYStart();
-		yEnd = left.GetYEnd();
-		
+		if(secondTriangle)
+		{
+			for(int i = left.GetYStart();i < right.GetYStart();i++)
+			{
+				left.Step();
+			}
+		}
+		Edge temp = left;
+		left = right;
+		right = temp;
+	}
+
+	if(secondTriangle && !rightOrLeft)
+	{
 		for(int i = left.GetYStart();i < right.GetYStart();i++)
 		{
 			left.Step();
 		}
 	}
-	for(int currentY = yBegin;currentY < yEnd;currentY++)
+	
+	
+	int yStart = second.GetYStart();
+	int yEnd   = second.GetYEnd();
+
+	for(int j = yStart; j < yEnd; j++)
 	{
-		RasterizeHorizontalLine(left,right,currentY,color);	
-		//Increment our values so we can step along the edge.
+		RasterizeHorizontalLine(left, right, j, Vector4f(0,0,0,0));
 		left.Step();
 		right.Step();
-	}	
+	}
 }
 
 void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Vector4f color)
