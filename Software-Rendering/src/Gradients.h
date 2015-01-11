@@ -8,18 +8,18 @@ class Gradients
 		Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex);
 
 		//Getters
-		float GetOneOverZX(){ return m_oneOverZX;}
-		float GetOneOverZY(){ return m_oneOverZY;}
+		float GetOneOverZXGradient(){ return m_oneOverZX;}
+		float GetOneOverZYGradient(){ return m_oneOverZY;}
 
-		float GetUOverZX(){ return m_uOverZX; }
-		float GetUOverZY(){ return m_uOverZY; }
+		float GetUOverZXGradient(){ return m_uOverZX; }
+		float GetUOverZYGradient(){ return m_uOverZY; }
 
-		float GetVOverZX(){ return m_vOverZX; }
-		float GetVOverZY(){ return m_vOverZY; }
+		float GetVOverZXGradient(){ return m_vOverZX; }
+		float GetVOverZYGradient(){ return m_vOverZY; }
 		
-		float* GetOneOverZ(){ return m_oneOverZ; }
-		float* GetUOverZ(){ return m_uOverZ; }
-		float* GetVOverZ(){ return m_vOverZ; } 
+		float GetOneOverZ(short location){ return m_oneOverZ[location]; }
+		float GetUOverZ(short location){ return m_uOverZ[location]; }
+		float GetVOverZ(short location){ return m_vOverZ[location]; } 
 	private:
 		Vertex* m_minYVertex;
 		Vertex* m_midYVertex;

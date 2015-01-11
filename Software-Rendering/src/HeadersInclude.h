@@ -16,7 +16,7 @@
 #include "Matrix4f.h"
 #include "Vector2f.h"
 #include "Vertex.h"
-#include "Edge.h"
 #include "Gradients.h"
+#include "Edge.h"
 #include "Rasterizer.h"
 #endif

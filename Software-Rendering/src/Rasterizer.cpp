@@ -41,9 +41,10 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	 	midYVertex = temp;
 	 }
 	//Creating the edges on which the triangle will be based upon.	
-	Edge topToBottom = Edge(minYVertex,maxYVertex);
-	Edge topToMiddle = Edge(minYVertex,midYVertex);
-	Edge middleToBottom = Edge(midYVertex,maxYVertex);
+	Gradients gradients = Gradients(minYVertex,midYVertex,maxYVertex);
+	Edge topToBottom = Edge(gradients,minYVertex,maxYVertex,0);
+	Edge topToMiddle = Edge(gradients,minYVertex,midYVertex,0);
+	Edge middleToBottom = Edge(gradients,midYVertex,maxYVertex,1);
 
 	bool rightOrLeft = minYVertex.Normal(maxYVertex,midYVertex) >= 0;
 
