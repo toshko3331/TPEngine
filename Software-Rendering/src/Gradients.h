@@ -25,9 +25,9 @@ class Gradients
 		Vertex* m_midYVertex;
 		Vertex* m_maxYVertex;
 		
-		float m_oneOverZ[2];
-		float m_uOverZ[2];
-		float m_vOverZ[2];
+		float m_oneOverZ[3];
+		float m_uOverZ[3];
+		float m_vOverZ[3];
 	
 		//Gradients	
 		float m_oneOverZX;

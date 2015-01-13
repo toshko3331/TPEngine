@@ -34,8 +34,17 @@ int main(int argc, char ** argv)
 	Vertex v3 = Vertex(Vector4f(1,-1,0,1),
 			Vector2f(1,0));
 	srand(time(NULL));
+
+	Bitmap texture = Bitmap(32,32);
+	for(int i = 0;i < texture.GetHeight();i++)
+	{
+		for(int j = 0;j < texture.GetWidth();j++)
+		{
+			texture.SetPixel(j,i,rand()%255,rand()%255,rand()%255,rand()%255);	
+		}	
+	}
 	
-	Rasterizer rasterizer = Rasterizer(&pixels);
+	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
 	Matrix4f projection = Matrix4f().InitializeIdentity().PerspectiveProjection(70,pixels.GetWidth()/pixels.GetHeight(),0.1,1000);
 	Matrix4f translation = Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3));
 	projection = projection * translation;

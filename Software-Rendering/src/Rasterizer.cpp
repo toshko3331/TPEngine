@@ -3,9 +3,10 @@
 //Temporary includes for the test code.
 #include <time.h>
 //End of temporary includes.
-Rasterizer::Rasterizer(Bitmap* bitmap)
+Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
 {
 	m_bitmap = bitmap;
+	m_texture = texture;
 	//Seeding the RNG for the test code.
 	srand(time(NULL));
 	//End of test code.
@@ -48,12 +49,11 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 
 	bool rightOrLeft = minYVertex.Normal(maxYVertex,midYVertex) >= 0;
 
-	ScanEdges(topToBottom,topToMiddle,rightOrLeft,false);
-	ScanEdges(topToBottom,middleToBottom,rightOrLeft,true);
+	ScanEdges(topToBottom,topToMiddle,rightOrLeft,false,gradients);
+	ScanEdges(topToBottom,middleToBottom,rightOrLeft,true,gradients);
 }
 
-
-void Rasterizer::ScanEdges(Edge first, Edge second, bool rightOrLeft,bool secondTriangle)
+void Rasterizer::ScanEdges(Edge first, Edge second, bool rightOrLeft,bool secondTriangle,Gradients gradients)
 {
 	Edge left = first;
 	Edge right = second;
@@ -85,13 +85,13 @@ void Rasterizer::ScanEdges(Edge first, Edge second, bool rightOrLeft,bool second
 
 	for(int j = yStart; j < yEnd; j++)
 	{
-		RasterizeHorizontalLine(left, right, j, Vector4f(0,0,0,0));
+		RasterizeHorizontalLine(left, right, j,gradients);
 		left.Step();
 		right.Step();
 	}
 }
 
-void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Vector4f color)
+void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradients gradients)
 {
 
 	//These 2 variables can be thought of as limits. 
@@ -99,11 +99,31 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Vecto
 	//These are the values at which a pixel should be filled
 	int xBegin = ceil(left.GetX());
 	int xEnd = ceil(right.GetX());
-	
+	float xApproxFloatError = xBegin - left.GetX();
+
+	float DistanceOfX = right.GetX() - left.GetX();
+	float UValueXStep = (right.GetUOverZ() - left.GetUOverZ())/DistanceOfX;
+	float VValueXStep = (right.GetVOverZ() - left.GetVOverZ())/DistanceOfX;
+	float OneOverZXStep = (right.GetOneOverZ() - left.GetOneOverZ())/DistanceOfX;
+		
+	float UValue = left.GetUOverZ() + UValueXStep * xApproxFloatError;
+	float VValue = left.GetVOverZ() + VValueXStep * xApproxFloatError;
+	float OneOverZ = left.GetOneOverZ() + OneOverZXStep * xApproxFloatError;
+
 	for(int currentX = xBegin;currentX < xEnd;currentX++)
 	{
+		float z = 1.0f/OneOverZ;
+
+		int textureX = (int)(((m_texture->GetWidth() - 1) + 0.5f) * (UValue * z));
+		int textureY = (int)(((m_texture->GetHeight() - 1) + 0.5f) * (VValue * z));
+
 		//The x values at whcih to draw the pixel is decided by the minimum and maximum variables
 		//while the Y-Axis is decided from the function from which this function is called.
-		m_bitmap->SetPixel(currentX,currentY,color.GetX(),color.GetY(),color.GetZ(),color.GetW());
+		m_bitmap->CopyTexelToPixel(textureX,textureY,currentX,currentY,m_texture);
+		
+		UValue = UValue + UValueXStep;
+		VValue = VValue + VValueXStep;
+		OneOverZ = OneOverZ + OneOverZXStep;
+
 	}
 }

@@ -25,3 +25,8 @@ void Bitmap::SetPixel(int x,int y,Uint32 a,Uint32 r,Uint32 g,Uint32 b)
 	//Bitshifting colors into the correct positions for the ARGB format.
 	m_pixels[y * m_width + x] = b | (g << 8) | (r << 16) | (a << 24);
 }
+
+void Bitmap::CopyTexelToPixel(int texelXCoord,int texelYCoord,int pixelXCoord,int pixelYCoord,Bitmap* texture)
+{
+	m_pixels[pixelYCoord * m_width + pixelXCoord] = texture->GetPixel((texelYCoord * texture->GetWidth()) + texelXCoord);
+}

@@ -7,9 +7,9 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 	m_midYVertex = &midYVertex;
 	m_maxYVertex = &maxYVertex;
 
-	m_oneOverZ[0] = 1.0f/minYVertex.GetW(); 
-	m_oneOverZ[1] = 1.0f/midYVertex.GetW(); 
-	m_oneOverZ[2] = 1.0f/maxYVertex.GetW(); 
+	m_oneOverZ[0] = 1.0f/minYVertex.GetW();
+	m_oneOverZ[1] = 1.0f/midYVertex.GetW();
+	m_oneOverZ[2] = 1.0f/maxYVertex.GetW();
 
 	m_uOverZ[0] = minYVertex.GetU()/minYVertex.GetW();
 	m_uOverZ[1] = midYVertex.GetU()/midYVertex.GetW();
@@ -29,11 +29,11 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 	m_oneOverZX = CalcStepX(m_oneOverZ)/dX;
 	m_oneOverZY = CalcStepY(m_oneOverZ)/dY;
 
-	m_uOverZX = CalcStepX(m_oneOverZ)/dX;
-	m_uOverZY = CalcStepY(m_oneOverZ)/dY;
+	m_uOverZX = CalcStepX(m_uOverZ)/dX;
+	m_uOverZY = CalcStepY(m_uOverZ)/dY;
 	
-	m_vOverZX = CalcStepX(m_oneOverZ)/dX;	
-	m_vOverZY = CalcStepY(m_oneOverZ)/dY;	
+	m_vOverZX = CalcStepX(m_vOverZ)/dX;	
+	m_vOverZY = CalcStepY(m_vOverZ)/dY;	
 }
 
 float Gradients::CalcStepX(float* gradient)
