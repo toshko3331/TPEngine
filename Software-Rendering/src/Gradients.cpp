@@ -26,23 +26,23 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 	
 	float dY = -dX;
 	//Calculating all gradients below.
-	m_oneOverZX = CalcStepX(m_oneOverZ)/dX;
-	m_oneOverZY = CalcStepY(m_oneOverZ)/dY;
+	m_oneOverZX = CalcGradientX(m_oneOverZ)/dX;
+	m_oneOverZY = CalcGradientY(m_oneOverZ)/dY;
 
-	m_uOverZX = CalcStepX(m_uOverZ)/dX;
-	m_uOverZY = CalcStepY(m_uOverZ)/dY;
+	m_uOverZX = CalcGradientX(m_uOverZ)/dX;
+	m_uOverZY = CalcGradientY(m_uOverZ)/dY;
 	
-	m_vOverZX = CalcStepX(m_vOverZ)/dX;	
-	m_vOverZY = CalcStepY(m_vOverZ)/dY;	
+	m_vOverZX = CalcGradientX(m_vOverZ)/dX;	
+	m_vOverZY = CalcGradientY(m_vOverZ)/dY;	
 }
 
-float Gradients::CalcStepX(float* gradient)
+float Gradients::CalcGradientX(float* gradient)
 {
 	//Calculates the numerator for the X step of the gradient.
 	return ((gradient[1] - gradient[2]) * (m_minYVertex->GetY() - m_maxYVertex->GetY())) - ((gradient[0] - gradient[2]) * (m_midYVertex->GetY() - m_maxYVertex->GetY()));
 
 }
-float Gradients::CalcStepY(float* gradient)
+float Gradients::CalcGradientY(float* gradient)
 {	
 	//Calculates the numerator for the Y step of the gradient.
 	return 	((gradient[1] - gradient[2]) * (m_minYVertex->GetX() - m_maxYVertex->GetX())) - ((gradient[0] - gradient[2]) * (m_midYVertex->GetX() - m_maxYVertex->GetX()));

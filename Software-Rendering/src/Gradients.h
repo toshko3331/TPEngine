@@ -40,6 +40,6 @@ class Gradients
 		float m_vOverZY;
 
 		//Used for calculating the numeratior of the gradients equation.
-		float CalcStepX(float* gradient);
-		float CalcStepY(float* gradient);	
+		float CalcGradientX(float* gradient);
+		float CalcGradientY(float* gradient);	
 };
