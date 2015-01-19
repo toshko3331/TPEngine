@@ -102,13 +102,13 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradi
 	float xApproxFloatError = xBegin - left.GetX();
 
 	float DistanceOfX = right.GetX() - left.GetX();
-	float UValueXStep = (right.GetUOverZ() - left.GetUOverZ())/DistanceOfX;
-	float VValueXStep = (right.GetVOverZ() - left.GetVOverZ())/DistanceOfX;
-	float OneOverZXStep = (right.GetOneOverZ() - left.GetOneOverZ())/DistanceOfX;
+	float UValueXGradient = (right.GetUOverZ() - left.GetUOverZ())/DistanceOfX;
+	float VValueXGradient = (right.GetVOverZ() - left.GetVOverZ())/DistanceOfX;
+	float OneOverZXGradient = (right.GetOneOverZ() - left.GetOneOverZ())/DistanceOfX;
 		
-	float UValue = left.GetUOverZ() + UValueXStep * xApproxFloatError;
-	float VValue = left.GetVOverZ() + VValueXStep * xApproxFloatError;
-	float OneOverZ = left.GetOneOverZ() + OneOverZXStep * xApproxFloatError;
+	float UValue = left.GetUOverZ() + UValueXGradient * xApproxFloatError;
+	float VValue = left.GetVOverZ() + VValueXGradient * xApproxFloatError;
+	float OneOverZ = left.GetOneOverZ() + OneOverZXGradient * xApproxFloatError;
 
 	for(int currentX = xBegin;currentX < xEnd;currentX++)
 	{
@@ -121,9 +121,9 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradi
 		//while the Y-Axis is decided from the function from which this function is called.
 		m_bitmap->CopyTexelToPixel(textureX,textureY,currentX,currentY,m_texture);
 		
-		UValue = UValue + UValueXStep;
-		VValue = VValue + VValueXStep;
-		OneOverZ = OneOverZ + OneOverZXStep;
+		UValue = UValue + UValueXGradient;
+		VValue = VValue + VValueXGradient;
+		OneOverZ = OneOverZ + OneOverZXGradient;
 
 	}
 }
