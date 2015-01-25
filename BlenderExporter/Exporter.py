@@ -75,19 +75,19 @@ def ExportToTPMap():
     for objects in geoGroup.objects:
         #Denoting the start of the object's data.
         file.write('\nopenwgo   {}\n'.format(objects.name))
-        file.write('wpos    {}/{}/{}\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
-        file.write('rot     {}/{}/{}\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
+        file.write('wpos    /{}/{}/{}\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
+        file.write('rot     /{}/{}/{}\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
         file.write('openov\n')
         j = 0
         for vertices in objects.data.vertices:
             #Looping through all of the vertices of the mesh.
-            file.write('ov      {}/{}/{}/{}\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
+            file.write('ov      /{}/{}/{}/{}\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
             j = j + 1
         file.write('closeov\n')
         file.write('openof\n')
         for polygons in objects.data.polygons:
             #Looping through all of the faces of the mesh.
-            file.write('of      {}/{}/{}\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
+            file.write('of      /{}/{}/{}\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
         file.write('closeof\n')
 	#File path for the texture that is going to be used.        
         try:
