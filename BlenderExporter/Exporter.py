@@ -1,5 +1,4 @@
 #Tested with Blender Version 2.73 for Linux
-#To be put into blender/*blender version*/scripts/startup/
 #Notes:
 #	- The output file is going to be the same as the script, unless a functionality to specifiy a directory is added.
 #Ideas:
@@ -8,11 +7,10 @@
 import bpy
 from bpy_extras import mesh_utils
 import os
-#Notes continued:
 #1. Get all of the level geometry data first.
 #	a.Loop through the 'WorldGeo' group.
 #	   On each loop
-#		I.Get the vertecies and faces of the object.
+#		I.Get the vertecies and indicies of the object.
 #		II.Afterwards get the location in World Space of the object.
 #
 # Stored in this format 
@@ -33,27 +31,30 @@ import os
 fileName = ''
 defaultName = 'level'
 
-def IsNameUsed(names, name):
+def isNameUsed(names, name):
     for string in names:
         if(string == name):
-            return True
-    return False      
+            return True            
+    return False
 
 def ExportToTPMap():
+   
     for root,dirs,files in os.walk("."):
         i = -1
         notQuit = True
         global fileName
         while(notQuit):
             i = i + 1
-            notQuit = IsNameUsed(files, defaultName + str(i))
-            fileName = defaultName + (str(i).replace("'","")) + '.tpmap'
+            notQuit = isNameUsed(files, defaultName + str(i) + '.tpmap')
+        if(notQuit == False):
+            fileName = defaultName + str(i) + '.tpmap'
+            break
     
-            ######## End of file validation code ##############
-            ###################################################
+    ######## End of file validation code ##############
+    ###################################################
 
     #Starting actual function
-    file = open(fileName,'w')
+    file = open('./' + fileName,'w')
     #Just writing some metadata.
     file.write('#.tpmap is a file format meant to be used with the TPEngine. The file format is the way that levels are designed in the TPEngine.\n')
     file.write('#File format written by Todor Penchev.\n')
@@ -61,7 +62,7 @@ def ExportToTPMap():
 
     #Check if the world geometry group exists.
     try:
-        geoGroup = bpy.data.groups['WorldGeo']  
+        geoGroup = bpy.data.groups['WorldGeo'] 
     except KeyError:
         print("'WorldGeo' group was not defined.")
         return 1
@@ -74,11 +75,11 @@ def ExportToTPMap():
         file.write('\nwgo   {}\n'.format(objects.name))
         file.write('wpos    {}/{}/{}\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
         file.write('rot     {}/{}/{}\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
-        i = 0
+        j = 0
         for vertices in objects.data.vertices:
             #Looping through all of the vertices of the mesh.
-            file.write('ov      {}/{}/{}/{}\n'.format(str(i),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
-            i = i + 1
+            file.write('ov      {}/{}/{}/{}\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
+            j = j + 1
         for polygons in objects.data.polygons:
             #Looping through all of the faces of the mesh.
             file.write('of      {}/{}/{}\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
