@@ -17,12 +17,16 @@ import os
 #
 # '#' Can be ignored and used as comments
 #
-# wg -- This will begin the world geometry section.
-# wgo name -- This will begin a world geometry object section.'name' is a string for the name of the object. 'name' stems from the "bpy.data.objects[#indexNumber].name".
+# openwg -- This will open the world geometry section.
+# openwgo name -- This will open a world geometry object section.'name' is a string for the name of the object. 'name' stems from the "bpy.data.objects[#indexNumber].name".
 # wpos x/y/z -- 'x','y', and 'z' are the coordinates of the object in World Space. 'wpos' stands for world position.
 # rot rotationX/rotationY/rotationZ --'rotationX', 'rotationY' and 'rotationZ' is the rotation of the object in euler angles.
-# ov id/x/y/z -- A vertex of the said object. 'id' is an int which gets incremented as a new vertex is added to the object. 'x' ,'y' and 'z' are floating point numbers representing each vertex's respective coordinates. 'ov' stands for object vertex
+# openov -- This will open the object vertex section.
+# ov id/x/y/z -- A vertex of the said object. 'id' is an int which gets incremented as a new vertex is added to the object. 'x' ,'y' and 'z' are floating point numbers representing each vertex's respective coordinates. 'ov' stands for object vertex.
+# closeov -- This will close the object vertex section.
+# openof -- This will open the object face section.
 # of idofvertex1/idofvertex2/idofvertex3 -- The three vertecies that are used to construct the face.'idofvertex#' are ints that are used to refrence vertecies.'of' stands for object face.
+# closeof -- This will close the object face section.
 # uv_map location -- The location of the texuture.'location' is the path to the texture
 # closewgo -- This will close the world geometry object section.
 # closewg -- This will close the world geometry section.
@@ -48,17 +52,9 @@ def ExportToTPMap():
             notQuit = isNameUsed(files, defaultName + str(i) + '.tpmap')
         if(notQuit == False):
             fileName = defaultName + str(i) + '.tpmap'
-            break
-    
+            break  
     ######## End of file validation code ##############
     ###################################################
-
-    #Starting actual function
-    file = open('./' + fileName,'w')
-    #Just writing some metadata.
-    file.write('#.tpmap is a file format meant to be used with the TPEngine. The file format is the way that levels are designed in the TPEngine.\n')
-    file.write('#File format written by Todor Penchev.\n')
-    file.write('#Exported from Blender {} \n'.format(bpy.app.version_string))
 
     #Check if the world geometry group exists.
     try:
@@ -67,23 +63,33 @@ def ExportToTPMap():
         print("'WorldGeo' group was not defined.")
         return 1
 
+    file = open('./' + fileName,'w')
+    #Just writing some metadata.
+    file.write('#.tpmap is a file format meant to be used with the TPEngine. The file format is the way that levels are designed in the TPEngine.\n')
+    file.write('#File format written by Todor Penchev.\n')
+    file.write('#Exported from Blender {} \n'.format(bpy.app.version_string))
+
     #Write the start of the world geometry section.
-    file.write('\nwg\n')
+    file.write('\nopenwg\n')
     
     for objects in geoGroup.objects:
         #Denoting the start of the object's data.
-        file.write('\nwgo   {}\n'.format(objects.name))
+        file.write('\nopenwgo   {}\n'.format(objects.name))
         file.write('wpos    {}/{}/{}\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
         file.write('rot     {}/{}/{}\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
+        file.write('openov\n')
         j = 0
         for vertices in objects.data.vertices:
             #Looping through all of the vertices of the mesh.
             file.write('ov      {}/{}/{}/{}\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
             j = j + 1
+        file.write('closeov\n')
+        file.write('openof\n')
         for polygons in objects.data.polygons:
             #Looping through all of the faces of the mesh.
             file.write('of      {}/{}/{}\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
-        #File path for the texture that is going to be used.        
+        file.write('closeof\n')
+	#File path for the texture that is going to be used.        
         try:
             file.write('uv_map  {}\n'.format(objects.active_material.active_texture.image.filepath))
         except:
