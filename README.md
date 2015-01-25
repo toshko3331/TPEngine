@@ -20,7 +20,7 @@ Progress
  - [x] Window
  - [x] Triangle Rasterizer
  - [x] 3D Perspective Projection
- - [ ] Texure Mapper
+ - [x] Texure Mapper
  - [ ] Mesh Loader
  - [ ] Clipping
  - [ ] Occlusion
