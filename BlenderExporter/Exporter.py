@@ -8,10 +8,11 @@
 import bpy
 from bpy_extras import mesh_utils
 import os
+#Notes continued:
 #1. Get all of the level geometry data first.
 #	a.Loop through the 'WorldGeo' group.
 #	   On each loop
-#		I.Get the vertecies and indicies of the object.
+#		I.Get the vertecies and faces of the object.
 #		II.Afterwards get the location in World Space of the object.
 #
 # Stored in this format 
