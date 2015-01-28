@@ -75,25 +75,31 @@ def ExportToTPMap():
     for objects in geoGroup.objects:
         #Denoting the start of the object's data.
         file.write('\nopenwgo   {}\n'.format(objects.name))
-        file.write('wpos    /{}/{}/{}\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
-        file.write('rot     /{}/{}/{}\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
+        file.write('wpos    /{}/{}/{}/\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
+        file.write('rot     /{}/{}/{}/\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
         file.write('openov\n')
         j = 0
+        #Triangluate faces here. This might be removed if it ends up being obsolet.
+        objects.select = True
+        bpy.ops.object.mode_set(mode='EDIT')       
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.mesh.quads_convert_to_tris()
+        bpy.ops.object.mode_set(mode='OBJECT')
         for vertices in objects.data.vertices:
             #Looping through all of the vertices of the mesh.
-            file.write('ov      /{}/{}/{}/{}\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
+            file.write('ov      /{}/{}/{}/{}/\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
             j = j + 1
         file.write('closeov\n')
         file.write('openof\n')
         for polygons in objects.data.polygons:
             #Looping through all of the faces of the mesh.
-            file.write('of      /{}/{}/{}\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
+            file.write('of      /{}/{}/{}/\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
         file.write('closeof\n')
 	#File path for the texture that is going to be used.        
         try:
-            file.write('uv_map  {}\n'.format(objects.active_material.active_texture.image.filepath))
+            file.write('uv_map  {}\n'.format(objects.data.uv_textures.active.data[0].image.name))        
         except:
-            print("WARNING: {} does not contain a texture. Script will continue but might not function within TPEngine\n".format(objects.name))
+            print("WARNING: {} does not contain a texture. Script will continue but might not function correctly within the TPEngine.\n".format(objects.name))
             #As a side note, maybe it should write a default texture to here.            
             file.write('uv_map  NO_TEXTURE\n')
         #Closing statment for the object and its data.
