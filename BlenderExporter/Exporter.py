@@ -74,7 +74,7 @@ def ExportToTPMap():
     
     for objects in geoGroup.objects:
         #Denoting the start of the object's data.
-        file.write('\nopenwgo   {}\n'.format(objects.name))
+        file.write('\nopenwgo {}\n'.format(objects.name))
         file.write('wpos    /{}/{}/{}/\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
         file.write('rot     /{}/{}/{}/\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
         file.write('openov\n')
@@ -97,11 +97,11 @@ def ExportToTPMap():
         file.write('closeof\n')
 	#File path for the texture that is going to be used.        
         try:
-            file.write('uv_map  {}\n'.format(objects.data.uv_textures.active.data[0].image.name))        
+            file.write('uv_map {}\n'.format(objects.data.uv_textures.active.data[0].image.name))        
         except:
             print("WARNING: {} does not contain a texture. Script will continue but might not function correctly within the TPEngine.\n".format(objects.name))
             #As a side note, maybe it should write a default texture to here.            
-            file.write('uv_map  NO_TEXTURE\n')
+            file.write('uv_map NO_TEXTURE\n')
         #Closing statment for the object and its data.
         file.write('closewgo\n')
 
