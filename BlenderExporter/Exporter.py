@@ -7,15 +7,9 @@
 import bpy
 from bpy_extras import mesh_utils
 import os
-#1. Get all of the level geometry data first.
-#	a.Loop through the 'WorldGeo' group.
-#	   On each loop
-#		I.Get the vertecies and indicies of the object.
-#		II.Afterwards get the location in World Space of the object.
-#
-# Stored in this format 
-#
-# '#' Can be ignored and used as comments
+###############Format Outline######################
+#-------------------------------------------------#
+# '#' Can be ignored and used as comments within the file.
 #
 # openwg -- This will open the world geometry section.
 # openwgo name -- This will open a world geometry object section.'name' is a string for the name of the object. 'name' stems from the "bpy.data.objects[#indexNumber].name".
@@ -27,22 +21,40 @@ import os
 # openof -- This will open the object face section.
 # of idofvertex1/idofvertex2/idofvertex3 -- The three vertecies that are used to construct the face.'idofvertex#' are ints that are used to refrence vertecies.'of' stands for object face.
 # closeof -- This will close the object face section.
-# uv_map location -- The location of the texuture.'location' is the path to the texture
+# opent -- This will open the object texel section.
+# ot vertexNumber/texelX/texelY/ -- A texel of the said object. 'texelX' and 'texelY' are the x and y texel coordinates.'vertexNumber' is the id of the vertex that is mapped to that UV coordinate.
+# closet -- This will close the object texel section.
+# uv_map name -- The location of the texuture.'location' is the path to the texture
 # closewgo -- This will close the world geometry object section.
 # closewg -- This will close the world geometry section.
 
 
 fileName = ''
 defaultName = 'level'
-
+definedVertices = []
 def isNameUsed(names, name):
     for string in names:
         if(string == name):
             return True            
     return False
 
+def IsUVCoordForVertexDefined(vertex):
+        if(len(definedVertices) == 0):
+                definedVertices.append(vertex)
+                return False
+        for number in definedVertices:
+             #   print(definedVertices)
+                if vertex == number:
+                        return True
+                else:
+                    #    print('Number:'.format(str(number)))
+                        continue
+        definedVertices.append(vertex)
+        return False
+
 def ExportToTPMap():
    
+    #Check if the file exists, if it does, simply increment the name so we don't overwrite it.
     for root,dirs,files in os.walk("."):
         i = -1
         notQuit = True
@@ -75,26 +87,44 @@ def ExportToTPMap():
     for objects in geoGroup.objects:
         #Denoting the start of the object's data.
         file.write('\nopenwgo {}\n'.format(objects.name))
-        file.write('wpos    /{}/{}/{}/\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
-        file.write('rot     /{}/{}/{}/\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
+        file.write('wpos /{}/{}/{}/\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
+        file.write('rot /{}/{}/{}/\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
         file.write('openov\n')
         j = 0
         #Triangluate faces here. This might be removed if it ends up being obsolet.
-        objects.select = True
-        bpy.ops.object.mode_set(mode='EDIT')       
-        bpy.ops.mesh.select_all(action='SELECT')
-        bpy.ops.mesh.quads_convert_to_tris()
-        bpy.ops.object.mode_set(mode='OBJECT')
+        try:
+                #Isnt working correctly.
+                objects.select = True
+                bpy.ops.object.mode_set(mode='EDIT')       
+                bpy.ops.mesh.select_all(action='SELECT')
+                bpy.ops.mesh.quads_convert_to_tris()
+                bpy.ops.object.mode_set(mode='OBJECT')
+                objects.select = False
+        except:
+                print("Did not triangluate correctly.")
+                return 1
         for vertices in objects.data.vertices:
             #Looping through all of the vertices of the mesh.
-            file.write('ov      /{}/{}/{}/{}/\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
+            file.write('ov /{}/{}/{}/{}/\n'.format(str(j),str(vertices.co.x),str(vertices.co.y),str(vertices.co.z)))
             j = j + 1
         file.write('closeov\n')
         file.write('openof\n')
         for polygons in objects.data.polygons:
             #Looping through all of the faces of the mesh.
-            file.write('of      /{}/{}/{}/\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
+            file.write('of /{}/{}/{}/\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
         file.write('closeof\n')
+        file.write('opent\n')
+        for polygons in objects.data.polygons:
+                vertexIndex = 0
+                for faces in polygons.loop_indices:
+                        #Checking for redundant vertex cooridnate since faces can share UVs.
+                        if IsUVCoordForVertexDefined(polygons.vertices[vertexIndex]):
+                                vertexIndex += 1
+                                continue
+                        else:
+                                file.write('ot /{}/{}/{}/\n'.format(str(polygons.vertices[vertexIndex]),str(objects.data.uv_layers.active.data[faces].uv.x),str(objects.data.uv_layers.active.data[faces].uv.y)))
+                                vertexIndex += 1
+        file.write('closet\n')
 	#File path for the texture that is going to be used.        
         try:
             file.write('uv_map {}\n'.format(objects.data.uv_textures.active.data[0].image.name))        
@@ -108,14 +138,15 @@ def ExportToTPMap():
     #Closing statment for the world geometry section. 
     file.write('closewg\n')
     file.close()
+    #Reseting the list so we can export more than once in a session.
+    del definedVertices[:]
+    return 0
 
 #Operator Class
 class TPMapExporter(bpy.types.Operator):
 
     bl_idname = "export.tpmap"
     bl_label = "Export to TPMap"
-
-    #Check if the file exists, if it does, simply increment the name so we don't overwrite it.
 
     def execute(self, context):
         ExportToTPMap()
