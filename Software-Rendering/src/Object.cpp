@@ -60,7 +60,7 @@ void Object::InsertionSortTexelCoords()
 			if(texelCoord > sortedTexelCoords[*sortedTexelCoordsIndex])
 			{
 				sortedTexelCoords.insert(sortedTexelCoordsIndex + 0,texelCoord);
-				sortedTexelCoords.insert(sortedTexelCoordsIndex + 1,m_texelCoords.at(3 * (*i) + 1);
+				sortedTexelCoords.insert(sortedTexelCoordsIndex + 1,m_texelCoords.at(3 * (*i) + 1));
 				sortedTexelCoords.insert(sortedTexelCoordsIndex + 2,m_texelCoords.at(3 * (*i) + 2));
 			}
 		}
