@@ -21,4 +21,5 @@
 #include "Rasterizer.h"
 #include "Object.h"
 #include "LevelLoader.h"
+#include "TriangulatedMesh.h"
 #endif
