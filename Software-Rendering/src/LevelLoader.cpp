@@ -239,4 +239,9 @@ LevelLoader::LevelLoader(std::string filename)
 			}			
 		}
 	}
+	else
+	{
+		//TODO:Add an error reporter log here.
+		std::cout << "LEVEL WAS NOT LOADED" << std::endl;
+	}
 }
