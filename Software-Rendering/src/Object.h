@@ -10,10 +10,12 @@ class Object
 		Object();
 		void AddVertex(float vertex);
 		void AddFace(int face);
+		void AddTexel(float texel);
 		void SetObjectName(std::string objectName);
 		void SetWorldPosition(float x, float y, float z);
 		void SetObjectEulerRotation(float x, float y, float z);
 		void SetTextureName(std::string textureName);
+		void InsertionSortTexelCoords();
 		//Getters
 		std::string GetObjectName(){ return m_objectName; } 
 		std::string GetTextureName(){ return m_textureName; }
@@ -21,6 +23,7 @@ class Object
 		Vector3f GetObjectEulerRotation(){ return m_eulerRotation; }
 		const std::vector<float>& GetVertexVector() { return m_vertecies; }
 		const std::vector<int>& GetFaceVector() { return m_faces; }
+		const std::vector<float>& GetTexelVector() { return m_texelCoords; }
 	private:
 		Vector3f m_eulerRotation;
 		Vector3f m_worldPosition;
@@ -28,4 +31,5 @@ class Object
 		std::string m_textureName;
 		std::vector<float> m_vertecies;
 		std::vector<int> m_faces;
+		std::vector<float> m_texelCoords;
 };
