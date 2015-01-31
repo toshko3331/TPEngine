@@ -15,6 +15,7 @@ class LevelLoader
 	private:
 		void appendVertex(Object* object, std::string source,int currentIndex);
 		void appendFaces(Object* object, std::string source,int currentIndex);
+		void appendTexel(Object* object, std::string source,int currentIndex);
 		void AddWorldLocationToObject(std::string line,Object* object);
 		void AddEulerRotationToObject(std::string line,Object* object);
 		std::string GetNextLine(std::ifstream& mapFile,std::string line);

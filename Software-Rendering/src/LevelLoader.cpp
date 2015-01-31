@@ -32,6 +32,22 @@ void LevelLoader::appendFaces(Object* object, std::string source,int currentInde
 	}
 }
 
+void LevelLoader::appendTexel(Object* object, std::string source,int currentIndex)
+{
+	//Doing it 3 times for each face since our algorithm can only draw in triagnles.
+	for(int i = 0; i < 3;i++)
+	{
+		//Finding out the boundaries of the nubmer
+		int firstDelimiterLocation = source.find_first_of('/');
+		int secondDelimiterLocation = source.find_first_of('/',firstDelimiterLocation+1);
+
+		//Getting the face and storing it in the vertex vector.    
+		object->AddTexel(atoi((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str()));
+		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next face.
+		source = source.erase(0,secondDelimiterLocation);
+	}
+}
+
 void LevelLoader::AddWorldLocationToObject(std::string line,Object* object)
 {
 	float x,y,z;
@@ -184,7 +200,21 @@ LevelLoader::LevelLoader(std::string filename)
 							line = GetNextLine(mapFile,line);
 							index++;
 						}
-					line = GetNextLine(mapFile,line);
+						line = GetNextLine(mapFile,line);
+					}
+					if(line == "opent")
+					{
+						line = GetNextLine(mapFile,line);
+						int index = 0;
+						while(line != "closet")
+						{
+							appendTexel(&object, line,index);
+							line = GetNextLine(mapFile,line);
+							index++;
+						}
+						//We need to insertion sort the UV coordinates because they are not sorted when they are exported out of Blender. The sorting will make it easier to use the UV coordinates.
+						object.InsertionSortTexelCoords();	
+						line = GetNextLine(mapFile,line);
 					}
 					//Reading and writing the texture file name into 'object'
 					if(line.substr(0,6) == "uv_map")
