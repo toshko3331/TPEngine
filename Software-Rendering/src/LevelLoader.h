@@ -11,7 +11,7 @@ class LevelLoader
 
 	public:
 		LevelLoader(std::string filename);
-		const std::vector<Object>& GetObjcets(){return m_objects; }
+		const std::vector<Object>& GetObjects(){return m_objects; }
 	private:
 		void appendVertex(Object* object, std::string source,int currentIndex);
 		void appendFaces(Object* object, std::string source,int currentIndex);

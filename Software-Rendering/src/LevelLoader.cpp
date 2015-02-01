@@ -42,7 +42,7 @@ void LevelLoader::appendTexel(Object* object, std::string source,int currentInde
 		int secondDelimiterLocation = source.find_first_of('/',firstDelimiterLocation+1);
 
 		//Getting the face and storing it in the vertex vector.    
-		object->AddTexel(atoi((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str()));
+		object->AddTexel((float)atof((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str()));
 		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next face.
 		source = source.erase(0,secondDelimiterLocation);
 	}
@@ -147,7 +147,7 @@ LevelLoader::LevelLoader(std::string filename)
 	bool isInWg = false;
 	bool isInWgo = false;
 	if (mapFile.is_open())
-  	{
+ 	{
 		while (getline(mapFile,line))
 		{
 			if(isInWg || line == "openwg")
@@ -212,8 +212,9 @@ LevelLoader::LevelLoader(std::string filename)
 							line = GetNextLine(mapFile,line);
 							index++;
 						}
-						//We need to insertion sort the UV coordinates because they are not sorted when they are exported out of Blender. The sorting will make it easier to use the UV coordinates.
-						object.InsertionSortTexelCoords();	
+						//We need to sort the UV coordinates because they are not sorted when they are exported out of Blender. The sorting will make it easier to use the UV coordinates.
+						//Insertion sort is theoritcally faster, however; it is not implemented correctly.
+						object.BubbleSortTexelCoords();	
 						line = GetNextLine(mapFile,line);
 					}
 					//Reading and writing the texture file name into 'object'
@@ -229,7 +230,6 @@ LevelLoader::LevelLoader(std::string filename)
 						isInWgo = false;
 						line = GetNextLine(mapFile,line);
 					}
-
 				}
 				//Closing the world geometry section. Pretty much ending the file here.
 				if(line == "closewg")
@@ -238,6 +238,7 @@ LevelLoader::LevelLoader(std::string filename)
 				}
 			}			
 		}
+		mapFile.close();
 	}
 	else
 	{
