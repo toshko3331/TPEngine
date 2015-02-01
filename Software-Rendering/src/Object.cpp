@@ -109,14 +109,14 @@ void Object::BubbleSortTexelCoords()
 	while(swapCounter != 0)
 	{	
 		swapCounter = 0;
-		for(int i = 0; i < m_texelCoords.size()/3 - 1;i++)
+		for(unsigned int i = 0; i < m_texelCoords.size()/3 - 1;i++)
 		{
 			//Check by the vertex id if they are in order.
-			if(m_texelCoords[i * 3] > m_texelCoords[(i+1) * 3])
+			if(m_texelCoords.at(i * 3) > m_texelCoords.at((i+1) * 3))
 			{
-				std::swap(m_texelCoords[(i * 3) + 0],m_texelCoords[(i+1) * 3 + 0]);
-				std::swap(m_texelCoords[(i * 3) + 1],m_texelCoords[(i+1) * 3 + 1]);
-				std::swap(m_texelCoords[(i * 3) + 2],m_texelCoords[(i+1) * 3 + 2]);
+				std::swap(m_texelCoords.at((i * 3) + 0),m_texelCoords.at((i+1) * 3 + 0));
+				std::swap(m_texelCoords.at((i * 3) + 1),m_texelCoords.at((i+1) * 3 + 1));
+				std::swap(m_texelCoords.at((i * 3) + 2),m_texelCoords.at((i+1) * 3 + 2));
 				swapCounter++;
 			}
 		}
