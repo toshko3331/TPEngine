@@ -41,41 +41,115 @@ void Object::SetObjectEulerRotation(float x, float y, float z)
 	m_eulerRotation = Vector3f(x,y,z);
 }
 
+//Scraped, this is not working correctly, but will be kept here incase I want to fix it.
 void Object::InsertionSortTexelCoords()
 {
 	//This has to be called for the texel coordinates vector to have proper data.
 	std::vector<float> sortedTexelCoords;
+	sortedTexelCoords.resize(m_texelCoords.size());
 	//-1 is used as a starting point, because all vertex ids are above or = to 0. This means that every coordinate will return that it is bigger for -1, and therefore, we can use -1 to register as the beginning of the vector.
+	std::cout << *(sortedTexelCoords.begin()) << std::endl;
 	sortedTexelCoords.insert(sortedTexelCoords.begin(),-1);
-	
-	for(std::vector<float>::iterator i = m_texelCoords.begin(); i != m_texelCoords.end();i++)
+	std::cout << (sortedTexelCoords.size()) << std::endl;
+	std::vector<float>::iterator i = m_texelCoords.begin();
+	std::advance(i,-1);
+	for(;i!= m_texelCoords.end();i++)
 	{
 		float texelCoord = m_texelCoords.at(3 * (*i));
-		for(std::vector<float>::iterator k = m_texelCoords.begin(); k != m_texelCoords.end();k++)
-		{
-			
-			std::vector<float>::iterator sortedTexelCoordsIndex;
+		std::vector<float>::iterator k = m_texelCoords.begin();
+		std::vector<float>::iterator sortedTexelCoordsIndex = m_texelCoords.begin();
+		std::advance(k,-1);
+		std::advance(sortedTexelCoordsIndex,-1);
+		for(;k != m_texelCoords.end();k++)
+		{	
 			//Offeseting the sortedTexelCoords by + 1 because of the intial -1 value added to the beginning of the vector.
-			*sortedTexelCoordsIndex = 3 * (*k) + 1;
-			if(texelCoord > sortedTexelCoords[*sortedTexelCoordsIndex])
+			//std::advance(sortedTexelCoordsIndex,3);
+			std::cout << "'i' is: " << *i << "\t'k' is: " << *k << std::endl;
+			if(texelCoord > sortedTexelCoords.at(*sortedTexelCoordsIndex))
 			{
-				sortedTexelCoords.insert(sortedTexelCoordsIndex + 0,texelCoord);
-				sortedTexelCoords.insert(sortedTexelCoordsIndex + 1,m_texelCoords.at(3 * (*i) + 1));
-				sortedTexelCoords.insert(sortedTexelCoordsIndex + 2,m_texelCoords.at(3 * (*i) + 2));
+				sortedTexelCoords.insert(sortedTexelCoordsIndex,texelCoord);
+				std::advance(sortedTexelCoordsIndex,1);
+				sortedTexelCoords.insert(sortedTexelCoordsIndex,m_texelCoords.at(3 * (*i) + 1));
+				std::advance(sortedTexelCoordsIndex,1);
+				sortedTexelCoords.insert(sortedTexelCoordsIndex,m_texelCoords.at(3 * (*i) + 2));
+				std::advance(sortedTexelCoordsIndex,1);
+				std::cout << "------------" << std::endl;
+				for(unsigned int o = 0; o < sortedTexelCoords.size();o++)
+				{
+										
+					std::cout << sortedTexelCoords[o] << std::endl;
+								
+				}
+				std::cout << "------------" << std::endl;	
+				break;
 			}
 		}
 	}
+
 	//Removing the -1 value,
 	sortedTexelCoords.erase(sortedTexelCoords.begin());
 	//Pre-computing the size of the sortedTexelCoords since it will change.
 	int vectorSize =  sortedTexelCoords.size();
-	std::vector<float>::iterator i = m_texelCoords.begin();
+	std::vector<float>::iterator it = m_texelCoords.begin();
+	std::advance(it,-3);
+		std::cout << "I got here 2" << std::endl;
 	//Deleting all of the vertex id numbers since they are not necesarry, and will make working with the vector harder.
 	for(int j = 0; j < vectorSize; j++)
 	{
-		*i = j * 3;
-		sortedTexelCoords.erase(i);
+		std::advance(it,3);
+		sortedTexelCoords.erase(it);
 	}
 	//Assinging the array back to the real one.
 	m_texelCoords = sortedTexelCoords;
 }
+
+void Object::BubbleSortTexelCoords()
+{
+	int swapCounter = 1;
+	while(swapCounter != 0)
+	{	
+		swapCounter = 0;
+		for(int i = 0; i < m_texelCoords.size()/3 - 1;i++)
+		{
+			if(m_texelCoords[i * 3] > m_texelCoords[(i+1) * 3])
+			{
+				//Just start from 0, not sure if this is right.
+				std::swap(m_texelCoords[(i * 3) + 0],m_texelCoords[(i+1) * 3 + 0]);
+				std::swap(m_texelCoords[(i * 3) + 1],m_texelCoords[(i+1) * 3 + 1]);
+				std::swap(m_texelCoords[(i * 3) + 2],m_texelCoords[(i+1) * 3 + 2]);
+				swapCounter++;
+				//std::cout << m_texelCoords.at(2) << std::endl;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

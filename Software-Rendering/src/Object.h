@@ -16,6 +16,7 @@ class Object
 		void SetObjectEulerRotation(float x, float y, float z);
 		void SetTextureName(std::string textureName);
 		void InsertionSortTexelCoords();
+		void BubbleSortTexelCoords();	
 		//Getters
 		std::string GetObjectName(){ return m_objectName; } 
 		std::string GetTextureName(){ return m_textureName; }
