@@ -41,6 +41,49 @@ void Object::SetObjectEulerRotation(float x, float y, float z)
 	m_eulerRotation = Vector3f(x,y,z);
 }
 
+//This method intializes the final vertex vector that allows the drawing of the object to occur.
+void Object::IntializeTriangulatedMesh()
+{
+	std::vector<float> texelVector;
+	//Creating a new vector with the texelCoords that are withouth indexes so we can refrence them easier in the Vertex cration loop.
+	for(unsigned int i = 0;i < m_texelCoords.size();i+=3)
+	{		
+		texelVector.push_back(m_texelCoords.at(i + 1));
+		texelVector.push_back(m_texelCoords.at(i + 2));
+	}	
+	
+	//Vertex creation loop
+	for(unsigned int i = 0; i < m_vertecies.size();i+=4)
+	{
+		//We do this to save computation, also the reason why we just don't use 'i' is because the size of the vector is exactly half the size.
+		int iDividedByTwo = i/2;
+		
+		m_objectVertecies.push_back(Vertex(
+					Vector4f(m_vertecies.at(i+1),m_vertecies.at(i+2),m_vertecies.at(i+3),1),
+					Vector2f(texelVector.at(iDividedByTwo),texelVector.at(iDividedByTwo+1))));
+	}
+}
+
+void Object::BubbleSortTexelCoords()
+{
+	int swapCounter = 1;
+	while(swapCounter != 0)
+	{	
+		swapCounter = 0;
+		for(unsigned int i = 0; i < m_texelCoords.size()/3 - 1;i++)
+		{
+			//Check by the vertex id if they are in order.
+			if(m_texelCoords.at(i * 3) > m_texelCoords.at((i+1) * 3))
+			{
+				std::swap(m_texelCoords.at((i * 3) + 0),m_texelCoords.at((i+1) * 3 + 0));
+				std::swap(m_texelCoords.at((i * 3) + 1),m_texelCoords.at((i+1) * 3 + 1));
+				std::swap(m_texelCoords.at((i * 3) + 2),m_texelCoords.at((i+1) * 3 + 2));
+				swapCounter++;
+			}
+		}
+	}
+}
+
 //Scraped, this is not working correctly, but will be kept here incase I want to fix it.
 void Object::InsertionSortTexelCoords()
 {
@@ -92,7 +135,7 @@ void Object::InsertionSortTexelCoords()
 	int vectorSize =  sortedTexelCoords.size();
 	std::vector<float>::iterator it = m_texelCoords.begin();
 	std::advance(it,-3);
-		std::cout << "I got here 2" << std::endl;
+	std::cout << "I got here 2" << std::endl;
 	//Deleting all of the vertex id numbers since they are not necesarry, and will make working with the vector harder.
 	for(int j = 0; j < vectorSize; j++)
 	{
@@ -102,28 +145,6 @@ void Object::InsertionSortTexelCoords()
 	//Assinging the array back to the real one.
 	m_texelCoords = sortedTexelCoords;
 }
-
-void Object::BubbleSortTexelCoords()
-{
-	int swapCounter = 1;
-	while(swapCounter != 0)
-	{	
-		swapCounter = 0;
-		for(unsigned int i = 0; i < m_texelCoords.size()/3 - 1;i++)
-		{
-			//Check by the vertex id if they are in order.
-			if(m_texelCoords.at(i * 3) > m_texelCoords.at((i+1) * 3))
-			{
-				std::swap(m_texelCoords.at((i * 3) + 0),m_texelCoords.at((i+1) * 3 + 0));
-				std::swap(m_texelCoords.at((i * 3) + 1),m_texelCoords.at((i+1) * 3 + 1));
-				std::swap(m_texelCoords.at((i * 3) + 2),m_texelCoords.at((i+1) * 3 + 2));
-				swapCounter++;
-			}
-		}
-	}
-}
-
-
 
 
 
