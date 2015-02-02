@@ -18,8 +18,7 @@
 #include "Vertex.h"
 #include "Gradients.h"
 #include "Edge.h"
-#include "Rasterizer.h"
 #include "Object.h"
 #include "LevelLoader.h"
-#include "TriangulatedMesh.h"
+#include "Rasterizer.h"
 #endif
