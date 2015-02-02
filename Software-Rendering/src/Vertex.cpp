@@ -24,9 +24,9 @@ Vertex Vertex::ApplyTransformations(Matrix4f transformations)
 void Vertex::PrintToConsole(bool withEndLineAppended)
 {
 	if(withEndLineAppended)
-		std::cout << "(" << m_x << "," << m_y << "," << m_z << "," << m_w << ")" << std::endl;
+		std::cout << "(" << m_x << "," << m_y << "," << m_z << "," << m_w << ");Texel(" << m_u <<","<< m_v << ")"  << std::endl;
 	else
-		std::cout << "(" << m_x << "," << m_y << "," << m_z << "," << m_w << ")";
+		std::cout << "(" << m_x << "," << m_y << "," << m_z << "," << m_w << ");Texel(" << m_u <<","<< m_v << ")";
 }
 
 float Vertex::Normal(Vertex maxYVertex, Vertex minYVertex)
