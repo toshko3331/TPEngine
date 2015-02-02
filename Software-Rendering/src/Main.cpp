@@ -35,6 +35,11 @@ int main(int argc, char ** argv)
 			Vector2f(1,0));
 	srand(time(NULL));
 
+	//Load the level and it's objects.
+	LevelLoader level("level0.tpmap");
+	//Get the objects from the level.
+	std::vector<Object>& objects = level.GetObjects();
+	//Load all textures through the bitmap class, but for now use the random texture.
 	Bitmap texture = Bitmap(32,32);
 	for(int i = 0;i < texture.GetHeight();i++)
 	{
@@ -43,7 +48,7 @@ int main(int argc, char ** argv)
 			texture.SetPixel(j,i,rand()%255,rand()%255,rand()%255,rand()%255);	
 		}	
 	}
-	
+
 	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
 	Matrix4f projection = Matrix4f().InitializeIdentity().PerspectiveProjection(70,pixels.GetWidth()/pixels.GetHeight(),0.1,1000);
 	Matrix4f translation = Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3));
@@ -66,17 +71,12 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		//Just some test code for the triangle rasterization.		
-		///	v1 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-		///	v2 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-		///	v3 = Vertex(Vector4f(rand()%WIDTH,rand()%HEIGHT,0,0));
-				
 		Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(rotAmount * 0.09);
 		rotation = projection * rotation;
 		
 		pixels.Clear(128);		
-		
-		rasterizer.RasterizeTriangle(v1.ApplyTransformations(rotation),v2.ApplyTransformations(rotation),v3.ApplyTransformations(rotation));
-	
+
+		rasterizer.RasterizeMesh(&rotation,objects.at(0));
 		rotAmount = rotAmount + delta;
 		//End of test code.
 		//1.Events
