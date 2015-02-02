@@ -9,7 +9,7 @@ class Rasterizer
 		void RasterizeTriangle(Vertex maxYVertex,Vertex midYVertex,Vertex minYVertex);
 		void ScanEdges(Edge a, Edge b, bool handedness,bool secondTriangle,Gradients gradients);
 		void RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradients gradients);
-
+		void RasterizeMesh(Matrix4f* rotationMatrixForDevPurposes,Object& object);
 	private:
 		Bitmap* m_bitmap;
 		Bitmap* m_texture;

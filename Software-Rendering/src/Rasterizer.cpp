@@ -1,16 +1,30 @@
 #include "HeadersInclude.h"
 #include <math.h>
-//Temporary includes for the test code.
-#include <time.h>
-//End of temporary includes.
+
 Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
 {
 	m_bitmap = bitmap;
 	m_texture = texture;
-	//Seeding the RNG for the test code.
-	srand(time(NULL));
-	//End of test code.
 }
+
+
+void Rasterizer::RasterizeMesh(Matrix4f* rotationMatrixForDevPurposes,Object& object)
+{
+	if(rotationMatrixForDevPurposes == NULL)
+	{
+		std::cout << "Matrix pointer not intiaized" << std::endl;
+		return;
+	}
+
+	for(unsigned int i = 0; i < object.GetFaceVector().size();i+=3)
+	{
+		RasterizeTriangle((object.GetVertexVector().at(object.GetFaceVector().at(i))).ApplyTransformations(*rotationMatrixForDevPurposes),
+				(object.GetVertexVector().at(object.GetFaceVector().at(i+1))).ApplyTransformations(*rotationMatrixForDevPurposes),
+				(object.GetVertexVector().at(object.GetFaceVector().at(i+2))).ApplyTransformations(*rotationMatrixForDevPurposes));
+	}
+
+}
+
 
 void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 {
@@ -20,6 +34,13 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	minYVertex = minYVertex.ApplyTransformations(transformations).PerspectiveDivide();
 	midYVertex = midYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
 	maxYVertex = maxYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
+	
+	//Temporary drawing checking thingie.	
+	if(minYVertex.Normal(maxYVertex,midYVertex) >= 0)
+	{	
+		return;
+	}
+		
 	//Sorting the vertices.
 	 if(minYVertex.GetY() > midYVertex.GetY())
 	 {
@@ -46,7 +67,7 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	Edge topToBottom = Edge(gradients,minYVertex,maxYVertex,0);
 	Edge topToMiddle = Edge(gradients,minYVertex,midYVertex,0);
 	Edge middleToBottom = Edge(gradients,midYVertex,maxYVertex,1);
-
+	
 	bool rightOrLeft = minYVertex.Normal(maxYVertex,midYVertex) >= 0;
 
 	ScanEdges(topToBottom,topToMiddle,rightOrLeft,false,gradients);
