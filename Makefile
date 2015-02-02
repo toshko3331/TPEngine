@@ -61,9 +61,8 @@ $(BUILD_DIR)Object.o:$(SRC)Object.cpp $(SRC)Object.h
 $(BUILD_DIR)LevelLoader.o:$(SRC)LevelLoader.cpp $(SRC)LevelLoader.h
 	$(CXX) -c $(SRC)LevelLoader.cpp $(INCLUDE) -o $(BUILD_DIR)LevelLoader.o
 
-$(BUILD_DIR)TriangulatedMesh.o:$(SRC)TriangulatedMesh.cpp $(SRC)TriangulatedMesh.h
-	$(CXX) -c $(SRC)TriangulatedMesh.cpp $(INCLUDE) -o $(BUILD_DIR)TriangulatedMesh.o
-
+#$(BUILD_DIR)TriangulatedMesh.o:$(SRC)TriangulatedMesh.cpp $(SRC)TriangulatedMesh.h
+#	$(CXX) -c $(SRC)TriangulatedMesh.cpp $(INCLUDE) -o $(BUILD_DIR)TriangulatedMesh.o
 
 #All of the clean up stuff below
 clean:
