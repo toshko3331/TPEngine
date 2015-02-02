@@ -226,6 +226,7 @@ LevelLoader::LevelLoader(std::string filename)
 					//Closing the object section. All code past this will not be realtive to this object.
 					if(line == "closewgo")
 					{
+						object.IntializeTriangulatedMesh();
 						m_objects.push_back(object);
 						isInWgo = false;
 						line = GetNextLine(mapFile,line);
