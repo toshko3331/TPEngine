@@ -125,7 +125,47 @@ void LevelLoader::AddEulerRotationToObject(std::string line,Object* object)
 		}
 	}
 	//Finally assigning the Euler Rotation from the read input to the object.
-	object->SetObjectEulerRotation(x,y,z);
+	object->SetEulerRotation(x,y,z);
+}
+
+void LevelLoader::AddScaleToObject(std::string line,Object* object)
+{
+	float x,y,z;
+	x = y = z = 0;
+	//Keeping track of which variables are intialized incase of some errror occuring. Basically error-checking code.
+	bool xIsInit = false;
+	bool yIsInit = false;
+	bool zIsInit = false;
+	while((xIsInit == false) && (yIsInit == false) && (zIsInit == false))
+	{
+		for(int i = 0; i < 3;i++)
+		{
+			//Finding out the boundaries of the nubmer
+			int firstDelimiterLocation = line.find_first_of('/');
+			int secondDelimiterLocation = line.find_first_of('/',firstDelimiterLocation+1);
+
+			//We do the calculation for each different coordinate at a different index because it flows nicely with the erase function of the string class.
+			if(i == 0 && (xIsInit == false))
+			{
+				x = (float)atof((line.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str());
+				xIsInit = true;
+			}
+			if(i == 1 && (yIsInit == false))
+			{
+				y = (float)atof((line.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str());
+				yIsInit = true;
+			}
+			if(i == 2 && (zIsInit == false))
+			{
+				z = (float)atof((line.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str());
+				zIsInit = true;
+			}
+				
+			line = line.erase(0,secondDelimiterLocation);
+		}
+	}
+	//Finally assigning the Euler Rotation from the read input to the object.
+	object->SetScale(x,y,z);
 }
 
 std::string LevelLoader::GetNextLine(std::ifstream& mapFile,std::string line)
@@ -175,6 +215,13 @@ LevelLoader::LevelLoader(std::string filename)
 					{
 						AddEulerRotationToObject(line,&object);
 						line = GetNextLine(mapFile,line);
+					}
+					//Reading and writing into 'object' the scale of the object. 
+					if(line.compare(0,5,"scale",0,5) == 0)
+					{
+						AddScaleToObject(line,&object);
+						line = GetNextLine(mapFile,line);
+						std::cout << object.GetScale().GetX() << "," << object.GetScale().GetY() << "," << object.GetScale().GetZ() << std::endl;
 					}
 					//Opening the vertex section where all of the vertecies of the object will be read and wrtitten to 'object'.
 					if(line == "openov")

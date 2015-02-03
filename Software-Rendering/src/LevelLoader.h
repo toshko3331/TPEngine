@@ -18,6 +18,7 @@ class LevelLoader
 		void appendTexel(Object* object, std::string source,int currentIndex);
 		void AddWorldLocationToObject(std::string line,Object* object);
 		void AddEulerRotationToObject(std::string line,Object* object);
+		void AddScaleToObject(std::string line,Object* object);
 		std::string GetNextLine(std::ifstream& mapFile,std::string line);
 		std::vector<Object> m_objects;
 };
