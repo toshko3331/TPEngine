@@ -1,6 +1,6 @@
 #include "HeadersInclude.h"
 #include <vector>
-Object::Object() : m_eulerRotation(Vector3f(0,0,0)), m_worldPosition(Vector3f(0,0,0))
+Object::Object() : m_eulerRotation(Vector3f(0,0,0)), m_worldPosition(Vector3f(0,0,0)), m_scale(Vector3f(0,0,0))
 {
 	m_objectName = "";
 	m_textureName = "";
@@ -36,9 +36,14 @@ void Object::SetWorldPosition(float x, float y, float z)
 	m_worldPosition = Vector3f(x,y,z);
 }
 
-void Object::SetObjectEulerRotation(float x, float y, float z)
+void Object::SetEulerRotation(float x, float y, float z)
 {
 	m_eulerRotation = Vector3f(x,y,z);
+}
+
+void Object::SetScale(float x, float y, float z)
+{
+	m_scale= Vector3f(x,y,z);
 }
 
 //This method intializes the final vertex vector that allows the drawing of the object to occur.

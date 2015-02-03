@@ -12,7 +12,8 @@ class Object
 		void AddTexel(float texel);
 		void SetObjectName(std::string objectName);
 		void SetWorldPosition(float x, float y, float z);
-		void SetObjectEulerRotation(float x, float y, float z);
+		void SetEulerRotation(float x, float y, float z);
+		void SetScale(float x, float y, float z);
 		void SetTextureName(std::string textureName);
 		void InsertionSortTexelCoords();
 		void BubbleSortTexelCoords();
@@ -21,7 +22,8 @@ class Object
 		std::string GetObjectName(){ return m_objectName; } 
 		std::string GetTextureName(){ return m_textureName; }
 		Vector3f GetWorldPosition(){ return m_worldPosition; }
-		Vector3f GetObjectEulerRotation(){ return m_eulerRotation; }
+		Vector3f GetEulerRotation(){ return m_eulerRotation; }
+		Vector3f GetScale() { return m_scale; } 
 		const std::vector<float>& GetRawVertexVector() { return m_vertecies; }
 		const std::vector<int>& GetFaceVector() { return m_faces; }
 		const std::vector<float>& GetTexelVector() { return m_texelCoords; }
@@ -29,6 +31,7 @@ class Object
 	private:
 		Vector3f m_eulerRotation;
 		Vector3f m_worldPosition;
+		Vector3f m_scale;
 		std::string m_objectName;
 		std::string m_textureName;
 		std::vector<float> m_vertecies;
