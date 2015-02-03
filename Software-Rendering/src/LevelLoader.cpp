@@ -221,7 +221,6 @@ LevelLoader::LevelLoader(std::string filename)
 					{
 						AddScaleToObject(line,&object);
 						line = GetNextLine(mapFile,line);
-						std::cout << object.GetScale().GetX() << "," << object.GetScale().GetY() << "," << object.GetScale().GetZ() << std::endl;
 					}
 					//Opening the vertex section where all of the vertecies of the object will be read and wrtitten to 'object'.
 					if(line == "openov")
