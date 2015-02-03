@@ -15,6 +15,7 @@ import os
 # openwgo name -- This will open a world geometry object section.'name' is a string for the name of the object. 'name' stems from the "bpy.data.objects[#indexNumber].name".
 # wpos x/y/z -- 'x','y', and 'z' are the coordinates of the object in World Space. 'wpos' stands for world position.
 # rot rotationX/rotationY/rotationZ --'rotationX', 'rotationY' and 'rotationZ' is the rotation of the object in euler angles.
+# scale scaleX/scaleY/scaleZ -- 'scaleX', 'scaleY' and 'scaleZ' is the scale of the object.
 # openov -- This will open the object vertex section.
 # ov id/x/y/z -- A vertex of the said object. 'id' is an int which gets incremented as a new vertex is added to the object. 'x' ,'y' and 'z' are floating point numbers representing each vertex's respective coordinates. 'ov' stands for object vertex.
 # closeov -- This will close the object vertex section.
@@ -89,6 +90,7 @@ def ExportToTPMap():
         file.write('\nopenwgo {}\n'.format(objects.name))
         file.write('wpos /{}/{}/{}/\n'.format(str(objects.location.x),str(objects.location.y),str(objects.location.z)))
         file.write('rot /{}/{}/{}/\n'.format(str(objects.rotation_euler.x),str(objects.rotation_euler.y),str(objects.rotation_euler.z)))
+        file.write('scale /{}/{}/{}/\n'.format(str(objects.scale.x),str(objects.scale.y),str(objects.scale.z)))
         file.write('openov\n')
         j = 0
         #Triangluate faces here. This might be removed if it ends up being obsolet.
@@ -114,16 +116,19 @@ def ExportToTPMap():
             file.write('of /{}/{}/{}/\n'.format(str(polygons.vertices[0]),str(polygons.vertices[1]),str(polygons.vertices[2])))
         file.write('closeof\n')
         file.write('opent\n')
-        for polygons in objects.data.polygons:
-                vertexIndex = 0
-                for faces in polygons.loop_indices:
-                        #Checking for redundant vertex cooridnate since faces can share UVs.
-                        if IsUVCoordForVertexDefined(polygons.vertices[vertexIndex]):
-                                vertexIndex += 1
-                                continue
-                        else:
-                                file.write('ot /{}/{}/{}/\n'.format(str(polygons.vertices[vertexIndex]),str(objects.data.uv_layers.active.data[faces].uv.x),str(objects.data.uv_layers.active.data[faces].uv.y)))
-                                vertexIndex += 1
+        try:
+                for polygons in objects.data.polygons:
+                        vertexIndex = 0
+                        for faces in polygons.loop_indices:
+                                #Checking for redundant vertex cooridnate since faces can share UVs.
+                                if IsUVCoordForVertexDefined(polygons.vertices[vertexIndex]):
+                                        vertexIndex += 1
+                                        continue
+                                else:
+                                        file.write('ot /{}/{}/{}/\n'.format(str(polygons.vertices[vertexIndex]),str(objects.data.uv_layers.active.data[faces].uv.x),str(objects.data.uv_layers.active.data[faces].uv.y)))
+                                        vertexIndex += 1
+        except:
+                print("Not able to write UV coordinates. No UV mesh present, or some other error has occured.")
         file.write('closet\n')
 	#File path for the texture that is going to be used.        
         try:
