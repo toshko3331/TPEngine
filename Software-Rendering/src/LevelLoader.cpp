@@ -1,6 +1,6 @@
 #include "HeadersInclude.h"
 
-void LevelLoader::appendVertex(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendVertex(Object* object, std::string source,int currentIndex)
 {
 	//Doing it 4 times for each vertex.
 	for(int i = 0; i < 4;i++)
@@ -16,7 +16,7 @@ void LevelLoader::appendVertex(Object* object, std::string source,int currentInd
 	}
 }
 
-void LevelLoader::appendFaces(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendFaces(Object* object, std::string source,int currentIndex)
 {
 	//Doing it 3 times for each face since our algorithm can only draw in triagnles.
 	for(int i = 0; i < 3;i++)
@@ -32,7 +32,7 @@ void LevelLoader::appendFaces(Object* object, std::string source,int currentInde
 	}
 }
 
-void LevelLoader::appendTexel(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendTexel(Object* object, std::string source,int currentIndex)
 {
 	//Doing it 3 times for each face since our algorithm can only draw in triagnles.
 	for(int i = 0; i < 3;i++)
@@ -232,7 +232,7 @@ LevelLoader::LevelLoader(std::string filename)
 						int index = 0;
 						while(line != "closeov")
 						{
-							appendVertex(&object, line,index);
+							AppendVertex(&object, line,index);
 							line = GetNextLine(mapFile,line);
 							index++;
 						}
@@ -245,7 +245,7 @@ LevelLoader::LevelLoader(std::string filename)
 						int index = 0;
 						while(line != "closeof")
 						{
-							appendFaces(&object, line,index);
+							AppendFaces(&object, line,index);
 							line = GetNextLine(mapFile,line);
 							index++;
 
@@ -258,7 +258,7 @@ LevelLoader::LevelLoader(std::string filename)
 						int index = 0;
 						while(line != "closet")
 						{
-							appendTexel(&object, line,index);
+							AppendTexel(&object, line,index);
 							line = GetNextLine(mapFile,line);
 							index++;
 							texelIsNotEmpty = true;
