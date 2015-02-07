@@ -1,6 +1,6 @@
 #include "HeadersInclude.h"
 
-void LevelLoader::AppendVertex(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendVertex(Object* object, std::string source)
 {
 	//Doing it 4 times for each vertex.
 	for(int i = 0; i < 4;i++)
@@ -16,7 +16,7 @@ void LevelLoader::AppendVertex(Object* object, std::string source,int currentInd
 	}
 }
 
-void LevelLoader::AppendFaces(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendFaces(Object* object, std::string source)
 {
 	//Doing it 3 times for each face since our algorithm can only draw in triagnles.
 	for(int i = 0; i < 3;i++)
@@ -32,7 +32,7 @@ void LevelLoader::AppendFaces(Object* object, std::string source,int currentInde
 	}
 }
 
-void LevelLoader::AppendTexel(Object* object, std::string source,int currentIndex)
+void LevelLoader::AppendTexel(Object* object, std::string source)
 {
 	//Doing it 3 times for each face since our algorithm can only draw in triagnles.
 	for(int i = 0; i < 3;i++)
@@ -229,12 +229,10 @@ LevelLoader::LevelLoader(std::string filename)
 					if(line == "openov")
 					{
 						line = GetNextLine(mapFile,line);
-						int index = 0;
 						while(line != "closeov")
 						{
-							AppendVertex(&object, line,index);
+							AppendVertex(&object, line);
 							line = GetNextLine(mapFile,line);
-							index++;
 						}
 						line = GetNextLine(mapFile,line);
 					}	
@@ -242,12 +240,10 @@ LevelLoader::LevelLoader(std::string filename)
 					if(line == "openof")
 					{
 						line = GetNextLine(mapFile,line);
-						int index = 0;
 						while(line != "closeof")
 						{
-							AppendFaces(&object, line,index);
+							AppendFaces(&object, line);
 							line = GetNextLine(mapFile,line);
-							index++;
 
 						}
 						line = GetNextLine(mapFile,line);
@@ -255,12 +251,10 @@ LevelLoader::LevelLoader(std::string filename)
 					if(line == "opent")
 					{
 						line = GetNextLine(mapFile,line);
-						int index = 0;
 						while(line != "closet")
 						{
-							AppendTexel(&object, line,index);
+							AppendTexel(&object, line);
 							line = GetNextLine(mapFile,line);
-							index++;
 							texelIsNotEmpty = true;
 						}
 						//Checking incase there are no texel coordinates specified.
