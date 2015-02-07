@@ -197,6 +197,8 @@ LevelLoader::LevelLoader(std::string filename)
 				{
 					
 					isInWgo = true;
+					//Used for preventing false intialization of texel vector if no coordiantes exist. Error-Checking variable.
+					bool texelIsNotEmpty = false;
 					Object object;
 					//Opening the world geometry section.
 					if(line.compare(0,7,"openwgo",0,7) == 0)
@@ -223,6 +225,7 @@ LevelLoader::LevelLoader(std::string filename)
 						line = GetNextLine(mapFile,line);
 					}
 					//Opening the vertex section where all of the vertecies of the object will be read and wrtitten to 'object'.
+					
 					if(line == "openov")
 					{
 						line = GetNextLine(mapFile,line);
@@ -245,6 +248,7 @@ LevelLoader::LevelLoader(std::string filename)
 							appendFaces(&object, line,index);
 							line = GetNextLine(mapFile,line);
 							index++;
+
 						}
 						line = GetNextLine(mapFile,line);
 					}
@@ -257,22 +261,33 @@ LevelLoader::LevelLoader(std::string filename)
 							appendTexel(&object, line,index);
 							line = GetNextLine(mapFile,line);
 							index++;
+							texelIsNotEmpty = true;
 						}
-						//We need to sort the UV coordinates because they are not sorted when they are exported out of Blender. The sorting will make it easier to use the UV coordinates.
-						//Insertion sort is theoritcally faster, however; it is not implemented correctly.
-						object.BubbleSortTexelCoords();	
+						//Checking incase there are no texel coordinates specified.
+						if(texelIsNotEmpty)
+						{
+							//We need to sort the UV coordinates because they are not sorted when they are exported out of Blender. The sorting will make it easier to use the UV coordinates.
+							object.BubbleSortTexelCoords();
+							
+						}else
+						{
+							std::cout << "FATAL ERROR:TEXEL COORDINATES ARE NON-EXISTANT ON OBJECT: " << object.GetObjectName() <<". Returning..."  << std::endl;
+							return;
+							//Insertion sort is theoritcally faster, however; it is not implemented correctly.							
+						}				
 						line = GetNextLine(mapFile,line);
 					}
 					//Reading and writing the texture file name into 'object'
 					if(line.substr(0,6) == "uv_map")
 					{
+
 						object.SetTextureName(line.substr(7));
 						line = GetNextLine(mapFile,line);
 					}
 					//Closing the object section. All code past this will not be realtive to this object.
 					if(line == "closewgo")
 					{
-						object.IntializeTriangulatedMesh();
+						object.IntializeTriangulatedMesh();				
 						m_objects.push_back(object);
 						isInWgo = false;
 						line = GetNextLine(mapFile,line);
