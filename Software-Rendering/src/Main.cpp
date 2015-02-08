@@ -27,19 +27,13 @@ int main(int argc, char ** argv)
 	bool quit = false;
 	SDL_Event event;
 	//// Temporary Variables for Testing Code  ///	
-	Vertex v1 = Vertex(Vector4f(0,1,0,1),
-			Vector2f(0.5,1));
-	Vertex v2 = Vertex(Vector4f(-1,-1,0,1),
-			Vector2f(0,0));
-	Vertex v3 = Vertex(Vector4f(1,-1,0,1),
-			Vector2f(1,0));
 	srand(time(NULL));
-
 	//Load the level and it's objects.
-	LevelLoader level("level0.tpmap");
+	LevelLoader_Obj level("level0.obj");	
 	//Get the objects from the level.
 	std::vector<Object>& objects = level.GetObjects();
 	//Load all textures through the bitmap class, but for now use the random texture.
+
 	Bitmap texture = Bitmap(32,32);
 	for(int i = 0;i < texture.GetHeight();i++)
 	{
@@ -57,7 +51,9 @@ int main(int argc, char ** argv)
 	
 	//Used for delta counter.
 	auto lastTime = std::chrono::high_resolution_clock::now();
-	float rotAmount = 0.0;
+	float rotationSpeed = 20;
+	float horizontalRotAmount = 0.0;
+	float verticalRotAmount = 0.0;
 	while (!quit)
 	{	
 		auto currentTime = std::chrono::high_resolution_clock::now();
@@ -71,24 +67,52 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		//Just some test code for the triangle rasterization.		
-		Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(rotAmount * 0.09);
+		Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(horizontalRotAmount * 0.09).RotateAroundX(verticalRotAmount * 0.09);
 		rotation = projection * rotation;
 		
 		pixels.Clear(128);		
 
-		rasterizer.RasterizeMesh(&rotation,objects.at(0));
-		rotAmount = rotAmount + delta;
+		rasterizer.RasterizeObjMesh(&rotation,objects.at(0));
+		//rotAmount = rotAmount + delta;
 		//End of test code.
 		//1.Events
 		while(SDL_PollEvent(&event))
 		{
 			if( event.type == SDL_QUIT )
-			{
-				quit = true;																					
+			{ 
+			quit = true;																					
+			}
+			if (event.type == SDL_KEYDOWN)
+    			{
+				if (event.key.keysym.sym == SDLK_LEFT)
+        			{
+					horizontalRotAmount = horizontalRotAmount + rotationSpeed;
+					std::cout << "Left Arrow " << horizontalRotAmount << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_RIGHT)
+        			{
+					horizontalRotAmount = horizontalRotAmount + -rotationSpeed;
+					std::cout << "Right Arrow " << horizontalRotAmount << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_UP)
+        			{
+					verticalRotAmount = verticalRotAmount + rotationSpeed;
+					std::cout << "Up Arrow " << verticalRotAmount << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_DOWN)
+        			{
+					verticalRotAmount = verticalRotAmount + -rotationSpeed;
+					std::cout << "Down Arrow " << verticalRotAmount << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_r)
+        			{
+					verticalRotAmount = 0;
+					horizontalRotAmount = 0;
+				}
 			}
 		}
 		//2.Logic
-
+	
 		//3.Rendering
 	        SDL_RenderClear(window.GetRenderer());
 		SDL_RenderCopy(window.GetRenderer(), window.GetTexture(), NULL, NULL);
