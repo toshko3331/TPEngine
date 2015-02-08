@@ -8,23 +8,50 @@ Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
 }
 
 
-void Rasterizer::RasterizeMesh(Matrix4f* rotationMatrixForDevPurposes,Object& object)
+void Rasterizer::RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& object)
 {
-	if(rotationMatrixForDevPurposes == NULL)
+	/* CURRENTLY BROKEN BECAUSE FACES ARE NOT EXPORTED CORRECTLY. DO NOT USE! */ 	
+	//TODO:Fix this.	
+	if(transformationMatrix == NULL)
 	{
-		std::cout << "Matrix pointer not intiaized" << std::endl;
+		std::cout << "Matrix pointer not initialized" << std::endl;
 		return;
 	}
-
-	for(unsigned int i = 0; i < object.GetFaceVector().size();i+=3)
+	
+	std::vector<Vertex> vertecies = object.GetVertexVector();
+	for(unsigned int i = 0; i < vertecies.size();i+=3)
 	{
-		RasterizeTriangle((object.GetVertexVector().at(object.GetFaceVector().at(i))).ApplyTransformations(*rotationMatrixForDevPurposes),
-				(object.GetVertexVector().at(object.GetFaceVector().at(i+1))).ApplyTransformations(*rotationMatrixForDevPurposes),
-				(object.GetVertexVector().at(object.GetFaceVector().at(i+2))).ApplyTransformations(*rotationMatrixForDevPurposes));
+		RasterizeTriangle((object.GetVertexVector().at(object.GetFaceVector().at(i))).ApplyTransformations(*transformationMatrix),
+				(object.GetVertexVector().at(object.GetFaceVector().at(i+1))).ApplyTransformations(*transformationMatrix),
+				(object.GetVertexVector().at(object.GetFaceVector().at(i+2))).ApplyTransformations(*transformationMatrix));
 	}
-
 }
 
+void Rasterizer::RasterizeObjMesh(Matrix4f* transformationMatrix,Object& object)
+{
+	if(transformationMatrix == NULL)
+	{
+		std::cout << "Matrix pointer not initialized." << std::endl;
+		return;
+	}
+	std::vector<float> vertecies = object.GetRawVertexVector();
+	std::vector<int> faces = object.GetFaceVector();
+	std::vector<float> texels = object.GetTexelVector();
+	for(unsigned int i = 0;i < faces.size();i+=6)
+	{
+		//TODO:This looks like total voodo to outsiders, comment it a bit.
+		Vertex v1 = Vertex(
+				Vector4f(vertecies.at(faces.at(i + 0) * 3 + 0),vertecies.at(faces.at(i + 0) * 3 + 1),vertecies.at(faces.at(i + 0) * 3 + 2),1),
+				Vector2f(texels.at(faces.at(i + 1) * 2 + 0),texels.at(faces.at(i + 1) * 2 + 1 )));
+		Vertex v2 = Vertex(
+				Vector4f(vertecies.at(faces.at(i + 2) * 3 + 0),vertecies.at(faces.at(i + 2) * 3 + 1),vertecies.at(faces.at(i + 2) * 3 + 2),1),
+				Vector2f(texels.at(faces.at(i + 3) * 2 + 0),texels.at(faces.at(i + 3) * 2 + 1 )));
+		Vertex v3 = Vertex(
+				Vector4f(vertecies.at(faces.at(i + 4) * 3 + 0),vertecies.at(faces.at(i + 4) * 3 + 1),vertecies.at(faces.at(i + 4) * 3 + 2),1),
+				Vector2f(texels.at(faces.at(i + 5) * 2 + 0),texels.at(faces.at(i + 5) * 2 + 1 )));
+		RasterizeTriangle(v1.ApplyTransformations(*transformationMatrix),v2.ApplyTransformations(*transformationMatrix),v3.ApplyTransformations(*transformationMatrix));
+	} 
+}
 
 void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 {
