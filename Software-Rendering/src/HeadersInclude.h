@@ -21,6 +21,5 @@
 #include "Object.h"
 #include "LevelLoader_TPMap.h"
 #include "Rasterizer.h"
-#include "lode/lodepng.h"
 #include "LevelLoader_Obj.h"
 #endif
