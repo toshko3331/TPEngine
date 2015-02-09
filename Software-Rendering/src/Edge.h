@@ -22,6 +22,9 @@ class Edge
 		float GetOneOverZ(){return m_OneOverZ;}
 		float GetOneOverZGradient(){return m_OneOverZGradient;}
 
+		float GetZBuffer(){return m_ZBuffer;}
+		float GetZBufferGradient(){return m_ZBufferGradient;}
+
 	private:
 		int m_yBegin;
 		int m_yEnd;
@@ -36,4 +39,7 @@ class Edge
 
 		float m_OneOverZ;
 		float m_OneOverZGradient;
+
+		float m_ZBuffer;
+		float m_ZBufferGradient;
 };

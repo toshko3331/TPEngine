@@ -30,6 +30,11 @@ Edge::Edge(Gradients gradients,Vertex minYVertex,Vertex maxYVertex,int minYVerte
 		     gradients.GetOneOverZXGradient() * xApproxFloatError +
 		     gradients.GetOneOverZYGradient() * yApproxFloatError;
 	m_OneOverZGradient = gradients.GetOneOverZYGradient() + gradients.GetOneOverZXGradient() * m_reciprocalSlope;
+	
+	m_ZBuffer = gradients.GetZBuffer(minYVertexIndex) +
+		     gradients.GetZBufferXGradient() * xApproxFloatError +
+		     gradients.GetZBufferYGradient() * yApproxFloatError;
+	m_ZBufferGradient = gradients.GetZBufferYGradient() + gradients.GetZBufferXGradient() * m_reciprocalSlope;
 }
 void Edge::Step()
 {
@@ -38,4 +43,5 @@ void Edge::Step()
 	m_UOverZ = m_UOverZ + m_UOverZGradient;
 	m_VOverZ = m_VOverZ + m_VOverZGradient;
 	m_OneOverZ = m_OneOverZ + m_OneOverZGradient;	
+	m_ZBuffer = m_ZBuffer + m_ZBufferGradient;
 }
