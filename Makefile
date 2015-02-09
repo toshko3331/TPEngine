@@ -4,7 +4,6 @@ OUT = $(BUILD_DIR)Engine
 CFLAGS = -std=c++11 -g -Wall
 
 #Directory to source files
-LODE_DIR = $(shell pwd)/Software-Rendering/src/lode/
 SRC = $(shell pwd)/Software-Rendering/src/
 H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h $(SRC)Gradients.h $(SRC)Object.h $(SRC)LevelLoader_TPMap.h $(SRC)LevelLoader_Obj.h
 CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp $(SRC)Gradients.cpp $(SRC)Object.cpp $(SRC)LevelLoader_TPMap.cpp $(SRC)LevelLoader_Obj.cpp
