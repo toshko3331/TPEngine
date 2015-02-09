@@ -6,7 +6,7 @@ class Vector3f
 {
 	public:
 		Vector3f(float x,float y,float z);
-
+		Vector3f Lerp(Vector3f x,float lerpAmount);
 
 		//Operator Overloading.
 		Vector3f operator+(const Vector3f& vec);	

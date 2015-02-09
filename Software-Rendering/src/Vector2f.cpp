@@ -6,6 +6,11 @@ Vector2f::Vector2f(float x, float y)
 	m_y = y;
 }
 
+Vector2f Vector2f::Lerp(Vector2f x,float lerpAmount)
+{
+	return Vector2f(((x - *this) * lerpAmount) + *this);
+}
+
 //					//
 //		Vector Arithmetic	//
 //					//

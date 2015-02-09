@@ -6,7 +6,7 @@ class Vector2f{
 
 	public:
 		Vector2f(float x, float y);
-
+		Vector2f Lerp(Vector2f x,float lerpAmount);
 		//Getters
 		float GetX(){ return m_x;}
 		float GetY(){ return m_y;}

@@ -6,6 +6,12 @@ Vector3f::Vector3f(float x,float y,float z) : m_x(x), m_y(y), m_z(z)
 
 }
 
+Vector3f Vector3f::Lerp(Vector3f x,float lerpAmount)
+{
+	return Vector3f(((x - *this) * lerpAmount) + *this);
+}
+
+
 //Overloading all operators that can make sense when using vectors.
 
 //Adition of vectors.
