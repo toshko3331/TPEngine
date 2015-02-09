@@ -19,6 +19,10 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 	m_vOverZ[1] = midYVertex.GetV()/midYVertex.GetW();
 	m_vOverZ[2] = maxYVertex.GetV()/maxYVertex.GetW();
 
+	m_zBuffer[0] = minYVertex.GetZ();
+	m_zBuffer[1] = midYVertex.GetZ();
+	m_zBuffer[2] = maxYVertex.GetZ();
+
 	//We need to calculate the dc'/dx and dc'/dy for each gradient. Since the U,V,and Z coordinates are our gradients, we need to that for all theree.
 	//Calculating the denominators for the gradients.
 	float dX = ((midYVertex.GetX() - maxYVertex.GetX()) * (minYVertex.GetY() - maxYVertex.GetY())) - 
@@ -33,7 +37,10 @@ Gradients::Gradients(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
 	m_uOverZY = CalcGradientY(m_uOverZ)/dY;
 	
 	m_vOverZX = CalcGradientX(m_vOverZ)/dX;	
-	m_vOverZY = CalcGradientY(m_vOverZ)/dY;	
+	m_vOverZY = CalcGradientY(m_vOverZ)/dY;
+	
+	m_zBufferX = CalcGradientX(m_zBuffer)/dX;
+	m_zBufferY = CalcGradientY(m_zBuffer)/dY;
 }
 
 float Gradients::CalcGradientX(float* gradient)
