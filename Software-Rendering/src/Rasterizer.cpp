@@ -1,10 +1,20 @@
 #include "HeadersInclude.h"
 #include <math.h>
+#include <string.h>
+#include <float.h>
 
 Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
 {
+	m_zBuffer = new float[((bitmap->GetWidth()) * (bitmap->GetHeight()))];
+	std::cout << ((bitmap->GetWidth()) * (bitmap->GetHeight())) << std::endl;
 	m_bitmap = bitmap;
 	m_texture = texture;
+}
+
+Rasterizer::~Rasterizer()
+{
+	//Freeing memory.
+	delete[] m_zBuffer;
 }
 
 
@@ -29,6 +39,12 @@ void Rasterizer::RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& objec
 
 void Rasterizer::RasterizeObjMesh(Matrix4f* transformationMatrix,Object& object)
 {
+	//Clearing the zBuffer.
+	for(int i = 0;i < ((m_bitmap->GetWidth()) * (m_bitmap->GetHeight()));i++)
+	{
+		m_zBuffer[i] = FLT_MAX;
+	}
+	
 	if(transformationMatrix == NULL)
 	{
 		std::cout << "Matrix pointer not initialized." << std::endl;
@@ -60,13 +76,7 @@ void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex ma
 	
 	minYVertex = minYVertex.ApplyTransformations(transformations).PerspectiveDivide();
 	midYVertex = midYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
-	maxYVertex = maxYVertex.ApplyTransformations(transformations).PerspectiveDivide(); 
-	
-	//Temporary drawing checking thingie.	
-	if(minYVertex.Normal(maxYVertex,midYVertex) >= 0)
-	{	
-		return;
-	}
+	maxYVertex = maxYVertex.ApplyTransformations(transformations).PerspectiveDivide();
 		
 	//Sorting the vertices.
 	 if(minYVertex.GetY() > midYVertex.GetY())
@@ -153,25 +163,32 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradi
 	float UValueXGradient = (right.GetUOverZ() - left.GetUOverZ())/DistanceOfX;
 	float VValueXGradient = (right.GetVOverZ() - left.GetVOverZ())/DistanceOfX;
 	float OneOverZXGradient = (right.GetOneOverZ() - left.GetOneOverZ())/DistanceOfX;
-		
+	float zBufferXGradient = (right.GetZBuffer() - left.GetZBuffer())/DistanceOfX;
+
 	float UValue = left.GetUOverZ() + UValueXGradient * xApproxFloatError;
 	float VValue = left.GetVOverZ() + VValueXGradient * xApproxFloatError;
 	float OneOverZ = left.GetOneOverZ() + OneOverZXGradient * xApproxFloatError;
+	float zBuffer = left.GetZBuffer()  + zBufferXGradient * xApproxFloatError;
 
 	for(int currentX = xBegin;currentX < xEnd;currentX++)
 	{
-		float z = 1.0f/OneOverZ;
 
-		int textureX = (int)(((m_texture->GetWidth() - 1) + 0.5f) * (UValue * z));
-		int textureY = (int)(((m_texture->GetHeight() - 1) + 0.5f) * (VValue * z));
+		int i = currentX + currentY * m_bitmap->GetWidth();
+		if(zBuffer < m_zBuffer[i])
+		{		
+			m_zBuffer[i] = zBuffer;
+			float z = 1.0f/OneOverZ;
+			int textureX = (int)(((m_texture->GetWidth() - 1) + 0.5f) * (UValue * z));
+			int textureY = (int)(((m_texture->GetHeight() - 1) + 0.5f) * (VValue * z));
+			//The x values at whcih to draw the pixel is decided by the minimum and maximum variables
+			//while the Y-Axis is decided from the function from which this function is called.
+			m_bitmap->CopyTexelToPixel(textureX,textureY,currentX,currentY,m_texture);
+		}
 
-		//The x values at whcih to draw the pixel is decided by the minimum and maximum variables
-		//while the Y-Axis is decided from the function from which this function is called.
-		m_bitmap->CopyTexelToPixel(textureX,textureY,currentX,currentY,m_texture);
-		
 		UValue = UValue + UValueXGradient;
 		VValue = VValue + VValueXGradient;
 		OneOverZ = OneOverZ + OneOverZXGradient;
+		zBuffer = zBuffer+ zBufferXGradient;
 
 	}
 }
