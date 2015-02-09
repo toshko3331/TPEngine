@@ -6,15 +6,15 @@ CFLAGS = -std=c++11 -g -Wall
 #Directory to source files
 LODE_DIR = $(shell pwd)/Software-Rendering/src/lode/
 SRC = $(shell pwd)/Software-Rendering/src/
-H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h $(SRC)Gradients.h $(SRC)Object.h $(SRC)LevelLoader_TPMap.h $(LODE_DIR)lodepng.h $(SRC)LevelLoader_Obj.h
-CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp $(SRC)Gradients.cpp $(SRC)Object.cpp $(SRC)LevelLoader_TPMap.cpp $(LODE_DIR)lodepng.cpp $(SRC)LevelLoader_Obj.cpp
+H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vector4f.h $(SRC)Vertex.h $(SRC)Rasterizer.h $(SRC)Vector2f.h $(SRC)Edge.h $(SRC)Matrix4f.h $(SRC)Gradients.h $(SRC)Object.h $(SRC)LevelLoader_TPMap.h $(SRC)LevelLoader_Obj.h
+CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp $(SRC)Gradients.cpp $(SRC)Object.cpp $(SRC)LevelLoader_TPMap.cpp $(SRC)LevelLoader_Obj.cpp
 
 #Directory to include
 INCLUDE = $(CFLAGS) $(shell sdl2-config --cflags)
 #Linking Directories
 LDFLAGS = $(shell sdl2-config --libs)
 
-OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3f.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o $(BUILD_DIR)Edge.o $(BUILD_DIR)Vector2f.o $(BUILD_DIR)Matrix4f.o $(BUILD_DIR)Gradients.o $(BUILD_DIR)Object.o $(BUILD_DIR)LevelLoader_TPMap.o $(BUILD_DIR)lodepng.o $(BUILD_DIR)LevelLoader_Obj.o
+OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3f.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o $(BUILD_DIR)Edge.o $(BUILD_DIR)Vector2f.o $(BUILD_DIR)Matrix4f.o $(BUILD_DIR)Gradients.o $(BUILD_DIR)Object.o $(BUILD_DIR)LevelLoader_TPMap.o $(BUILD_DIR)LevelLoader_Obj.o
 
 
 all:$(OUT)
@@ -61,9 +61,6 @@ $(BUILD_DIR)Object.o:$(SRC)Object.cpp $(SRC)Object.h
 
 $(BUILD_DIR)LevelLoader_TPMap.o:$(SRC)LevelLoader_TPMap.cpp $(SRC)LevelLoader_TPMap.h
 	$(CXX) -c $(SRC)LevelLoader_TPMap.cpp $(INCLUDE) -o $(BUILD_DIR)LevelLoader_TPMap.o
-
-$(BUILD_DIR)lodepng.o:$(LODE_DIR)lodepng.cpp $(LODE_DIR)lodepng.h
-	$(CXX) -c $(LODE_DIR)lodepng.cpp $(INCLUDE) -o $(BUILD_DIR)lodepng.o
 
 $(BUILD_DIR)LevelLoader_Obj.o:$(SRC)LevelLoader_Obj.cpp $(SRC)LevelLoader_Obj.h
 	$(CXX) -c $(SRC)LevelLoader_Obj.cpp $(INCLUDE) -o $(BUILD_DIR)LevelLoader_Obj.o
