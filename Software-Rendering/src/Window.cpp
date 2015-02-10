@@ -10,7 +10,7 @@ Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags)
 	//Error Checking Code.
 	if(m_window == NULL)
 	{
-		ErrorReport::WriteToLog("SDL_CreateWindow");
+		ErrorReport::WriteToLog_SDL("SDL_CreateWindow");
 		SDL_Quit();
 	}
 
@@ -19,7 +19,7 @@ Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags)
 	//Error Checking Code.	
         if(m_renderer == NULL)
 	{
-		ErrorReport::WriteToLog("SDL_CreateRenderer");
+		ErrorReport::WriteToLog_SDL("SDL_CreateRenderer");
 		SDL_DestroyWindow(m_window);
 		SDL_Quit();
 	}
@@ -29,7 +29,7 @@ Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags)
    	//Error Checking Code.
 	if(m_texture == NULL)
 	{
-		ErrorReport::WriteToLog("SDL_CreateWindow");
+		ErrorReport::WriteToLog_SDL("SDL_CreateWindow");
 		
 		SDL_DestroyWindow(m_window);
 		SDL_DestroyRenderer(m_renderer);
