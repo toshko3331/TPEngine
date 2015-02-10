@@ -9,6 +9,12 @@ Vector4f::Vector4f(float x,float y,float z,float w)
 	m_w = w;
 }
 
+Vector4f Vector4f::Lerp(Vector4f x,float lerpAmount)
+{
+	return Vector4f(((x - *this) * lerpAmount) + *this);
+}
+
+
 //					//
 //		Vector Arithmetic	//
 //					//

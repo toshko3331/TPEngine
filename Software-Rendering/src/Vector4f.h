@@ -5,7 +5,7 @@ class Vector4f{
 		
 	public:
 		Vector4f(float x,float y,float z,float w);
-
+		Vector4f Lerp(Vector4f x,float lerpAmount);
 		//Operator Overloading to make it easier to work with the vectors in general.                                                          
 		Vector4f operator+(const Vector4f& vec);
 		Vector4f operator-(const Vector4f& vec);
