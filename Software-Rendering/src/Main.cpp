@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 	//Error Checking Code.
 	if(initSuccess != 0)
 	{
-		ErrorReport::WriteToLog("SDL_Init");
+		ErrorReport::WriteToLog_SDL("SDL_Init");
 		return 1;
 	}
 		
