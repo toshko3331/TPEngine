@@ -16,5 +16,6 @@ class Rasterizer
 		Bitmap* m_bitmap;
 		Bitmap* m_texture;
 		float* m_zBuffer;
-	
+		bool ClipAxis(std::vector<Vertex>& vertecies,std::vector<Vertex>& help,int index);
+		void ClipPart(std::vector<Vertex>& vertecies, int index, float CF, std::vector<Vertex>& finalV);
 };
