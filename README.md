@@ -21,8 +21,9 @@ Progress
  - [x] Triangle Rasterizer
  - [x] 3D Perspective Projection
  - [x] Texure Mapper
- - [ ] Mesh Loader
- - [ ] Clipping
- - [ ] Occlusion
+ - [x] Mesh Loader
+ - [x] Clipping
+ - [x] Z-Buffer
+ - [ ] Texture Loader
  - [ ] Lighting
  - [ ] Level Editor
