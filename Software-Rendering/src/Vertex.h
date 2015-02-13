@@ -11,13 +11,16 @@ class Vertex
 		float GetZ() { return m_z;}
 		float GetW() { return m_w;}
 		Vector4f GetVertex(){ return Vector4f(m_x,m_y,m_z,m_w);}
-		float	 GetU(){ return m_u;}
-		float	 GetV(){ return m_v;}
+		float GetU(){ return m_u;}
+		float GetV(){ return m_v;}
+		float GetBasedOnIndex(int index);
+		bool IsInsideScreen();
 		//Methods
 		Vertex PerspectiveDivide();
 		Vertex ApplyTransformations(Matrix4f transformations);
 		void   PrintToConsole(bool withEndLineAppended);
 		float  Normal(Vertex minYVertex,Vertex maxYVertex);	
+		Vertex Lerp(Vertex vertex, float lerpAmount);
 	private:
 		float m_x;
 		float m_y;
