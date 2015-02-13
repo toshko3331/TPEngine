@@ -21,6 +21,11 @@ void Object::AddTexel(float texel)
 	m_texelCoords.push_back(texel);
 }
 
+void Object::AddNormal(float normal)
+{
+	m_normals.push_back(normal);
+}
+
 void Object::SetObjectName(std::string objectName)
 {
 	m_objectName = objectName;
@@ -150,31 +155,3 @@ void Object::InsertionSortTexelCoords()
 	//Assinging the array back to the real one.
 	m_texelCoords = sortedTexelCoords;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

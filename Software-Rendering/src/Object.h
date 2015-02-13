@@ -10,6 +10,7 @@ class Object
 		void AddVertex(float vertex);
 		void AddFace(int face);
 		void AddTexel(float texel);
+		void AddNormal(float normal);
 		void SetObjectName(std::string objectName);
 		void SetWorldPosition(float x, float y, float z);
 		void SetEulerRotation(float x, float y, float z);
@@ -27,6 +28,7 @@ class Object
 		const std::vector<float>& GetRawVertexVector() { return m_vertecies; }
 		const std::vector<int>& GetFaceVector() { return m_faces; }
 		const std::vector<float>& GetTexelVector() { return m_texelCoords; }
+		const std::vector<float>& GetNormals() { return m_normals; } 
 		std::vector<Vertex>& GetVertexVector() { return m_objectVertecies; }
 	private:
 		Vector3f m_eulerRotation;
@@ -37,5 +39,6 @@ class Object
 		std::vector<float> m_vertecies;
 		std::vector<int> m_faces;
 		std::vector<float> m_texelCoords;
+		std::vector<float> m_normals;
 		std::vector<Vertex> m_objectVertecies;
 };
