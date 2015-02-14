@@ -6,7 +6,6 @@
 Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
 {
 	m_zBuffer = new float[((bitmap->GetWidth()) * (bitmap->GetHeight()))];
-	std::cout << ((bitmap->GetWidth()) * (bitmap->GetHeight())) << std::endl;
 	m_bitmap = bitmap;
 	m_texture = texture;
 }
