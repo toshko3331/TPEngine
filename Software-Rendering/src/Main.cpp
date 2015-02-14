@@ -42,7 +42,7 @@ int main(int argc, char ** argv)
 	}
 	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
 	//// End of Temporary Variables ///
-	Camera camera(70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,2)));
+	Camera camera(70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3)));
 	while (!quit)
 	{	
 		SDL_UpdateTexture(window.GetTexture(), NULL ,pixels.GetPixels(),WIDTH * sizeof(Uint32));	
