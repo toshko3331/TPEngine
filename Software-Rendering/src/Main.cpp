@@ -3,7 +3,6 @@
 //Temporary include calls
 #include <time.h>
 #include <math.h>
-#include <chrono> // This might not be a good choice since it might not be supported across all compilers.
 //End of temporary include calls
 
 #define WIDTH 1200 
@@ -33,7 +32,6 @@ int main(int argc, char ** argv)
 	//Get the objects from the level.
 	std::vector<Object>& objects = level.GetObjects();
 	//Load all textures through the bitmap class, but for now use the random texture.
-
 	Bitmap texture = Bitmap(32,32);
 	for(int i = 0;i < texture.GetHeight();i++)
 	{
@@ -42,74 +40,27 @@ int main(int argc, char ** argv)
 			texture.SetPixel(j,i,rand()%255,rand()%255,rand()%255,rand()%255);	
 		}	
 	}
-
 	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
-	Matrix4f projection = Matrix4f().InitializeIdentity().PerspectiveProjection(70,pixels.GetWidth()/pixels.GetHeight(),0.1,1000);
-	Matrix4f translation = Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3));
-	projection = projection * translation;
 	//// End of Temporary Variables ///
-	
-	//Used for delta counter.
-	auto lastTime = std::chrono::high_resolution_clock::now();
-	float rotationSpeed = 20;
-	float horizontalRotAmount = 0.0;
-	float verticalRotAmount = 0.0;
+	Camera camera(70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,2)));
 	while (!quit)
 	{	
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		auto delta = (std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime-lastTime).count())/1000000;
-		lastTime = currentTime;
-		
 		SDL_UpdateTexture(window.GetTexture(), NULL ,pixels.GetPixels(),WIDTH * sizeof(Uint32));	
 		//Logic of this loop
 		//------------------
 		//1.Events
 		//2.Logic
 		//3.Rendering
-		//Just some test code for the triangle rasterization.		
-		Matrix4f rotation = Matrix4f().InitializeIdentity().RotateAroundY(horizontalRotAmount * 0.09).RotateAroundX(verticalRotAmount * 0.09);
-		rotation = projection * rotation;
-		
 		pixels.Clear(128);		
-
-		rasterizer.RasterizeObjMesh(&rotation,objects.at(0));
-		//rotAmount = rotAmount + delta;
-		//End of test code.
+		rasterizer.RasterizeObjMesh(&camera.GetMatrix(),objects.at(0));
 		//1.Events
 		while(SDL_PollEvent(&event))
 		{
 			if( event.type == SDL_QUIT )
-			{ 
-			quit = true;																					
+			{
+				quit = true;
 			}
-			if (event.type == SDL_KEYDOWN)
-    			{
-				if (event.key.keysym.sym == SDLK_LEFT)
-        			{
-					horizontalRotAmount = horizontalRotAmount + rotationSpeed;
-					std::cout << "Left Arrow " << horizontalRotAmount << std::endl;
-				}
-				if (event.key.keysym.sym == SDLK_RIGHT)
-        			{
-					horizontalRotAmount = horizontalRotAmount + -rotationSpeed;
-					std::cout << "Right Arrow " << horizontalRotAmount << std::endl;
-				}
-				if (event.key.keysym.sym == SDLK_UP)
-        			{
-					verticalRotAmount = verticalRotAmount + rotationSpeed;
-					std::cout << "Up Arrow " << verticalRotAmount << std::endl;
-				}
-				if (event.key.keysym.sym == SDLK_DOWN)
-        			{
-					verticalRotAmount = verticalRotAmount + -rotationSpeed;
-					std::cout << "Down Arrow " << verticalRotAmount << std::endl;
-				}
-				if (event.key.keysym.sym == SDLK_r)
-        			{
-					verticalRotAmount = 0;
-					horizontalRotAmount = 0;
-				}
-			}
+			camera.UpdateCamera(&event);
 		}
 		//2.Logic
 	
