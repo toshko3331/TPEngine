@@ -15,5 +15,6 @@ class LevelLoader_Obj
 		void AppendVertex(Object* object, std::string source);
 		void AppendFace(Object* object, std::string source);
 		void AppendTexel(Object* object, std::string source);
+		void AppendNormal(Object* object, std::string source);
 		std::vector<Object> objectVector;	
 };

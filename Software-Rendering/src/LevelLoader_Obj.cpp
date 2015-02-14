@@ -1,31 +1,22 @@
 #include "HeadersInclude.h"
 
-void LevelLoader_Obj::AppendFace(Object* object,std::string source)
+void LevelLoader_Obj::AppendVertex(Object *object,std::string source)
 {
+	//Doing it 3 times for each vertex.
 	for(int i = 0; i < 3;i++)
 	{
 		//Finding out the boundaries of the nubmer
 		int firstDelimiterLocation = source.find_first_of(' ');
 		int secondDelimiterLocation = source.find_first_of(' ',firstDelimiterLocation+1);
-		int slashDelimiterLocation = source.find_first_of('/');
-		//Getting the faces and storing them in the face vector.
-		//Minusing when we have the number as an int because the obj file starts to count at 1 and not 0 as we need it.
-		object->AddFace((atoi((source.substr(firstDelimiterLocation + 1,slashDelimiterLocation - firstDelimiterLocation - 1)).c_str())) - 1);
-		if(i != 2)
-		{
-			object->AddFace((atoi((source.substr(slashDelimiterLocation + 1,slashDelimiterLocation - secondDelimiterLocation)).c_str())) - 1);
-		}
-		else
-		{
-			object->AddFace(atoi(source.substr(slashDelimiterLocation + 1,source.find('\n') - 1).c_str()) - 1);
-		}
-		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next face.
+
+		//Getting the vertex and storing it in the vertex vector.    
+		object->AddVertex(((float)atof((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str())));
+		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next vertex.
 		source = source.erase(0,secondDelimiterLocation);
-	
 	}
 }
 
-void LevelLoader_Obj::AppendTexel(Object* object, std::string source)
+void LevelLoader_Obj::AppendTexel(Object* object,std::string source)
 {
 	//Loop 2 times. Once for each texel.
 	for(int i = 0; i < 2;i++)
@@ -41,20 +32,47 @@ void LevelLoader_Obj::AppendTexel(Object* object, std::string source)
 	}
 }
 
-void LevelLoader_Obj::AppendVertex(Object *object,std::string source)
+void LevelLoader_Obj::AppendNormal(Object* object,std::string source)
 {
-	//Doing it 3 times for each vertex.
+	//Doing it 3 times for each normal coordinate.
 	for(int i = 0; i < 3;i++)
 	{
 		//Finding out the boundaries of the nubmer
 		int firstDelimiterLocation = source.find_first_of(' ');
 		int secondDelimiterLocation = source.find_first_of(' ',firstDelimiterLocation+1);
 
-		//Getting the vertex and storing it in the vertex vector.    
-		object->AddVertex(((float)atof((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str())));
+		//Getting the normal and storing it in the normal vector.    
+		object->AddNormal(((float)atof((source.substr(firstDelimiterLocation + 1,secondDelimiterLocation - firstDelimiterLocation - 1)).c_str())));
 		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next vertex.
 		source = source.erase(0,secondDelimiterLocation);
 	}	
+}
+
+void LevelLoader_Obj::AppendFace(Object* object,std::string source)
+{
+	for(int i = 0; i < 3;i++)
+	{
+		//Finding out the boundaries of the nubmer
+		int firstDelimiterLocation = source.find_first_of(' ');
+		int secondDelimiterLocation = source.find_first_of(' ',firstDelimiterLocation+1);
+		int firstSlashDelimiterLocation = source.find_first_of('/');
+		int secondSlashDelimiterLocation = source.find_first_of('/',firstSlashDelimiterLocation+1);
+		//Getting the faces and storing them in the face vector.
+		//Minusing when we have the number as an int because the obj file starts to count at 1 and not 0 as we need it.
+		object->AddFace((atoi((source.substr(firstDelimiterLocation + 1,firstSlashDelimiterLocation - firstDelimiterLocation - 1)).c_str())) - 1);
+		object->AddFace((atoi((source.substr(firstSlashDelimiterLocation + 1,secondDelimiterLocation - firstSlashDelimiterLocation - 1)).c_str())) - 1);
+		if(i != 2)
+		{
+			object->AddFace((atoi((source.substr(secondSlashDelimiterLocation + 1,secondDelimiterLocation - secondSlashDelimiterLocation)).c_str())) - 1);
+		}
+		else
+		{
+			object->AddFace(atoi(source.substr(secondSlashDelimiterLocation + 1,source.find('\n') - 1).c_str()) - 1);
+		}
+		//Since this string is local, we simply erase it, and this way we dont have to compute any text postion data for the next face.
+		source = source.erase(0,secondDelimiterLocation);
+	
+	}
 }
 
 std::string LevelLoader_Obj::GetNextLine(std::ifstream& mapFile,std::string line)
@@ -104,6 +122,15 @@ LevelLoader_Obj::LevelLoader_Obj(std::string objFile)
 					line = GetNextLine(mapFile,line);
 				}	
 			}
+			if(line.compare(0,2,"vn",0,2) == 0)
+			{
+				while(line.compare(0,2,"vn",0,2) == 0)
+				{
+					//Set object's normals to that of the paramater in 'vn'.
+					AppendNormal(&object,line);
+					line = GetNextLine(mapFile,line);
+				}
+			}
 			if(line.compare(0,1,"f",0,1) == 0)
 			{
 				//Set object's face coordinates to the acoording coordinates.
@@ -118,11 +145,13 @@ LevelLoader_Obj::LevelLoader_Obj(std::string objFile)
 			if(object.GetRawVertexVector().size() != 0 && object.GetFaceVector().size() != 0 && object.GetTexelVector().size() != 0)
 			{
 				objectVector.push_back(object);
-			}	
+			}
 		}
 	}else
 	{
-		//TODO:Add an error reporter log here.
-		std::cout << "FATAL ERROR:Could not open .obj file." << std::endl;
+		ErrorReport::WriteToLog("Could not open .obj file.");
+		exit(EXIT_FAILURE);
+		
 	}
+	mapFile.close();
 }
