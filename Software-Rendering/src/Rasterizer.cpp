@@ -73,7 +73,7 @@ void Rasterizer::RasterizeObjMesh(Matrix4f* transformationMatrix,Object& object)
 	if(transformationMatrix == NULL)
 	{
 
-		ErrorReporter::WriteToLog("Matrix pointer not initialized.");
+		ErrorReport::WriteToLog("Matrix pointer not initialized.");
 		return;
 	}
 	std::vector<float> raw_vertices = object.GetRawVertexVector();
