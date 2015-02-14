@@ -72,25 +72,26 @@ void Rasterizer::RasterizeObjMesh(Matrix4f* transformationMatrix,Object& object)
 	
 	if(transformationMatrix == NULL)
 	{
+		//TODO: Update this to an ErrorReporter function.
 		std::cout << "Matrix pointer not initialized." << std::endl;
 		return;
 	}
 	std::vector<float> raw_vertices = object.GetRawVertexVector();
 	std::vector<int> faces = object.GetFaceVector();
 	std::vector<float> texels = object.GetTexelVector();
-	for(unsigned int i = 0;i < faces.size();i+=6)
+	for(unsigned int i = 0;i < faces.size();i+=9)
 	{
 		//TODO:This looks like total voodo to outsiders, comment it a bit.
 		Vertex v1 = Vertex(
 				Vector4f(raw_vertices.at(faces.at(i + 0) * 3 + 0),raw_vertices.at(faces.at(i + 0) * 3 + 1),raw_vertices.at(faces.at(i + 0) * 3 + 2),1),
 				Vector2f(texels.at(faces.at(i + 1) * 2 + 0),texels.at(faces.at(i + 1) * 2 + 1 ))).ApplyTransformations(*transformationMatrix);
 		Vertex v2 = Vertex(
-				Vector4f(raw_vertices.at(faces.at(i + 2) * 3 + 0),raw_vertices.at(faces.at(i + 2) * 3 + 1),raw_vertices.at(faces.at(i + 2) * 3 + 2),1),
-				Vector2f(texels.at(faces.at(i + 3) * 2 + 0),texels.at(faces.at(i + 3) * 2 + 1 ))).ApplyTransformations(*transformationMatrix);
+				Vector4f(raw_vertices.at(faces.at(i + 3) * 3 + 0),raw_vertices.at(faces.at(i + 3) * 3 + 1),raw_vertices.at(faces.at(i + 3) * 3 + 2),1),
+				Vector2f(texels.at(faces.at(i + 4) * 2 + 0),texels.at(faces.at(i + 4) * 2 + 1 ))).ApplyTransformations(*transformationMatrix);
 		Vertex v3 = Vertex(
-				Vector4f(raw_vertices.at(faces.at(i + 4) * 3 + 0),raw_vertices.at(faces.at(i + 4) * 3 + 1),raw_vertices.at(faces.at(i + 4) * 3 + 2),1),
-				Vector2f(texels.at(faces.at(i + 5) * 2 + 0),texels.at(faces.at(i + 5) * 2 + 1 ))).ApplyTransformations(*transformationMatrix);
-		
+				Vector4f(raw_vertices.at(faces.at(i + 6) * 3 + 0),raw_vertices.at(faces.at(i + 6) * 3 + 1),raw_vertices.at(faces.at(i + 6) * 3 + 2),1),
+				Vector2f(texels.at(faces.at(i + 7) * 2 + 0),texels.at(faces.at(i + 7) * 2 + 1 ))).ApplyTransformations(*transformationMatrix);
+	
 		bool v1IsInsideScreen = v1.IsInsideScreen();
 		bool v2IsInsideScreen = v2.IsInsideScreen();
 		bool v3IsInsideScreen = v3.IsInsideScreen();
