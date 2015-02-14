@@ -18,7 +18,7 @@ class Vertex
 		//Methods
 		Vertex PerspectiveDivide();
 		Vertex ApplyTransformations(Matrix4f transformations);
-		void   PrintToConsole(bool withEndLineAppended);
+		void   PrintToConsole(bool withEndLineAppended = true);
 		float  Normal(Vertex minYVertex,Vertex maxYVertex);	
 		Vertex Lerp(Vertex vertex, float lerpAmount);
 	private:
