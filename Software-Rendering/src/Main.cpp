@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 	//// Temporary Variables for Testing Code  ///	
 	srand(time(NULL));
 	//Load the level and it's objects.
-	LevelLoader_Obj level("level0.obj");	
+	LevelLoader_Obj level("monkey.obj");	
 	//Get the objects from the level.
 	std::vector<Object>& objects = level.GetObjects();
 	//Load all textures through the bitmap class, but for now use the random texture.
@@ -42,7 +42,14 @@ int main(int argc, char ** argv)
 	}
 	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
 	//// End of Temporary Variables ///
-	Camera camera(70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3)));
+	Camera camera(WIDTH,70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3)));
+	
+	//We might not need this method anymore	
+	if(SDL_SetRelativeMouseMode(SDL_TRUE) != 0)
+	{
+		ErrorReport::WriteToLog_SDL("SDL_SetRelativeMouseMode");
+	}
+	SDL_ShowCursor(0);
 	while (!quit)
 	{	
 		SDL_UpdateTexture(window.GetTexture(), NULL ,pixels.GetPixels(),WIDTH * sizeof(Uint32));	
@@ -52,7 +59,7 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		pixels.Clear(128);		
-		rasterizer.RasterizeObjMesh(&camera.GetMatrix(),objects.at(0));
+		rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(0));
 		//1.Events
 		while(SDL_PollEvent(&event))
 		{
@@ -60,8 +67,10 @@ int main(int argc, char ** argv)
 			{
 				quit = true;
 			}
+			//TODO:Pre-Compute these outside of the loop.
 			camera.UpdateCamera(&event);
-		}
+//			SDL_WarpMouseInWindow(window.GetWindow(),(int)(WIDTH/2),(int)(HEIGHT/2));
+	}
 		//2.Logic
 	
 		//3.Rendering
