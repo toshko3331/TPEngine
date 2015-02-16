@@ -59,7 +59,11 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		pixels.Clear(128);		
-		rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(0),level);
+		for(unsigned int i = 0;i < objects.size();i++)
+		{
+			rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(i),level);
+		}
+		rasterizer.ClearZBuffer();
 		//1.Events
 		while(SDL_PollEvent(&event))
 		{
