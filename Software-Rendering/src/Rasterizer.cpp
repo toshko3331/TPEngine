@@ -73,11 +73,6 @@ void Rasterizer::ClipPart(std::vector<Vertex>& vertices, int index, float CF, st
 
 void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,OBJLevel& level)
 {
-	//Clearing the zBuffer.
-	for(int i = 0;i < m_bitmap->GetWidth() * m_bitmap->GetHeight();i++)
-	{
-		m_zBuffer[i] = FLT_MAX;
-	}
 	
 	std::vector<float> raw_vertices = level.GetVertecies();
 	std::vector<int> faces = object.GetFaceVector();
