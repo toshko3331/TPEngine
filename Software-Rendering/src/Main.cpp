@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 	//// Temporary Variables for Testing Code  ///	
 	srand(time(NULL));
 	//Load the level and it's objects.
-	LevelLoader_Obj level("monkey.obj");	
+	OBJLevel level("monkey.obj");	
 	//Get the objects from the level.
 	std::vector<Object>& objects = level.GetObjects();
 	//Load all textures through the bitmap class, but for now use the random texture.
@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
 		//2.Logic
 		//3.Rendering
 		pixels.Clear(128);		
-		rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(0));
+		rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(0),level);
 		//1.Events
 		while(SDL_PollEvent(&event))
 		{
