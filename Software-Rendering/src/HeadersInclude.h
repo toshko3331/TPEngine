@@ -8,6 +8,7 @@
 #include <SDL\SDL.h>
 #endif
 //Doing it this way so we can include everything with just one header file.
+#include "png.h"
 #include "Vector4f.h"
 #include "Vector2f.h"
 #include "Vector3f.h"
