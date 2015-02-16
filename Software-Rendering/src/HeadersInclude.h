@@ -20,7 +20,6 @@
 #include "Gradients.h"
 #include "Edge.h"
 #include "Object.h"
-#include "LevelLoader_TPMap.h"
+#include "OBJLevel.h"
 #include "Rasterizer.h"
-#include "LevelLoader_Obj.h"
 #endif
