@@ -9,9 +9,9 @@ H = $(SRC)Bitmap.h $(SRC)ErrorReport.h $(SRC)Vector3f.h $(SRC)Window.h $(SRC)Vec
 CPP = $(SRC)Bitmap.cpp $(SRC)ErrorReport.cpp $(SRC)Vector3f.cpp $(SRC)Window.cpp $(SRC)Vector4f.cpp $(SRC)Vertex.cpp $(SRC)Rasterizer.cpp $(SRC)Main.cpp $(SRC)Edge.cpp $(SRC)Matrix4f.cpp $(SRC)Gradients.cpp $(SRC)Object.cpp $(SRC)OBJLevel.cpp $(SRC)Camera.cpp
 
 #Directory to include
-INCLUDE = $(CFLAGS) $(shell sdl2-config --cflags)
+INCLUDE = $(CFLAGS) $(shell sdl2-config --cflags) -lpng16
 #Linking Directories
-LDFLAGS = $(shell sdl2-config --libs)
+LDFLAGS = $(shell sdl2-config --libs) -lpng16
 
 OBJECTS = $(BUILD_DIR)Main.o $(BUILD_DIR)Bitmap.o $(BUILD_DIR)Vector3f.o $(BUILD_DIR)Window.o $(BUILD_DIR)Vector4f.o $(BUILD_DIR)Vertex.o $(BUILD_DIR)Rasterizer.o $(BUILD_DIR)Edge.o $(BUILD_DIR)Vector2f.o $(BUILD_DIR)Matrix4f.o $(BUILD_DIR)Gradients.o $(BUILD_DIR)Object.o $(BUILD_DIR)OBJLevel.o $(BUILD_DIR)Camera.o
 
