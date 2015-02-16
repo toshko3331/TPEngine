@@ -16,6 +16,15 @@ Rasterizer::~Rasterizer()
 	delete[] m_zBuffer;
 }
 
+void Rasterizer::ClearZBuffer()
+{
+	//Clearing the zBuffer.
+	for(int i = 0;i < m_bitmap->GetWidth() * m_bitmap->GetHeight();i++)
+	{
+		m_zBuffer[i] = FLT_MAX;
+	}
+}
+
 bool Rasterizer::ClipAxis(std::vector<Vertex>& vertices,std::vector<Vertex>& help,int index)
 {
 	ClipPart(vertices,index,1, help);

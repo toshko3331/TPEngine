@@ -12,6 +12,7 @@ class Rasterizer
 		void RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradients gradients);
 		void RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& object);
 		void RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,OBJLevel& level);
+		void ClearZBuffer();
 	private:
 		Bitmap* m_bitmap;
 		Bitmap* m_texture;
