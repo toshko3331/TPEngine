@@ -62,7 +62,7 @@ void Rasterizer::ClipPart(std::vector<Vertex>& vertices, int index, float CF, st
 	}
 }
 
-void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object)
+void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,OBJLevel& level)
 {
 	//Clearing the zBuffer.
 	for(int i = 0;i < m_bitmap->GetWidth() * m_bitmap->GetHeight();i++)
@@ -70,9 +70,12 @@ void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object)
 		m_zBuffer[i] = FLT_MAX;
 	}
 	
-	std::vector<float> raw_vertices = object.GetRawVertexVector();
+	std::vector<float> raw_vertices = level.GetVertecies();
 	std::vector<int> faces = object.GetFaceVector();
-	std::vector<float> texels = object.GetTexelVector();
+	std::vector<float> texels = level.GetTexelVector();
+
+	std::cout << raw_vertices.at(1) << std::endl;
+	//transformationMatrix = transformationMatrix.Translate(Vector3f(4,0,0));
 	for(unsigned int i = 0;i < faces.size();i+=9)
 	{
 		//TODO:This looks like total voodo to outsiders, comment it a bit.
@@ -85,7 +88,7 @@ void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object)
 		Vertex v3 = Vertex(
 				Vector4f(raw_vertices.at(faces.at(i + 6) * 3 + 0),raw_vertices.at(faces.at(i + 6) * 3 + 1),raw_vertices.at(faces.at(i + 6) * 3 + 2),1),
 				Vector2f(texels.at(faces.at(i + 7) * 2 + 0),texels.at(faces.at(i + 7) * 2 + 1 ))).ApplyTransformations(transformationMatrix);
-	
+		
 		bool v1IsInsideScreen = v1.IsInsideScreen();
 		bool v2IsInsideScreen = v2.IsInsideScreen();
 		bool v3IsInsideScreen = v3.IsInsideScreen();
@@ -250,7 +253,7 @@ void Rasterizer::RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& objec
 {
 	/* CURRENTLY BROKEN BECAUSE FACES ARE NOT EXPORTED CORRECTLY. DO NOT USE! */ 	
 	//TODO:Fix this.	
-	if(transformationMatrix == NULL)
+	/*if(transformationMatrix == NULL)
 	{
 		std::cout << "Matrix pointer not initialized" << std::endl;
 		return;
@@ -263,5 +266,6 @@ void Rasterizer::RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& objec
 				(object.GetVertexVector().at(object.GetFaceVector().at(i+1))).ApplyTransformations(*transformationMatrix),
 				(object.GetVertexVector().at(object.GetFaceVector().at(i+2))).ApplyTransformations(*transformationMatrix));
 	}
+*/ 	
 }
 
