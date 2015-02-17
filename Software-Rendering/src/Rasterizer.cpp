@@ -78,7 +78,6 @@ void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,O
 	std::vector<int> faces = object.GetFaceVector();
 	std::vector<float> texels = level.GetTexelVector();
 
-	std::cout << raw_vertices.at(1) << std::endl;
 	//transformationMatrix = transformationMatrix.Translate(Vector3f(4,0,0));
 	for(unsigned int i = 0;i < faces.size();i+=9)
 	{
@@ -252,24 +251,3 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradi
 
 	}
 }
-
-void Rasterizer::RasterizeTPMapMesh(Matrix4f* transformationMatrix,Object& object)
-{
-	/* CURRENTLY BROKEN BECAUSE FACES ARE NOT EXPORTED CORRECTLY. DO NOT USE! */ 	
-	//TODO:Fix this.	
-	/*if(transformationMatrix == NULL)
-	{
-		std::cout << "Matrix pointer not initialized" << std::endl;
-		return;
-	}
-	
-	std::vector<Vertex> vertices = object.GetVertexVector();
-	for(unsigned int i = 0; i < vertices.size();i+=3)
-	{
-		RasterizeTriangle((object.GetVertexVector().at(object.GetFaceVector().at(i))).ApplyTransformations(*transformationMatrix),
-				(object.GetVertexVector().at(object.GetFaceVector().at(i+1))).ApplyTransformations(*transformationMatrix),
-				(object.GetVertexVector().at(object.GetFaceVector().at(i+2))).ApplyTransformations(*transformationMatrix));
-	}
-*/ 	
-}
-
