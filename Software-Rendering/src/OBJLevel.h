@@ -10,7 +10,7 @@ class OBJLevel
 	public:
 		OBJLevel(std::string filename);
 		std::string GetNextLine(std::ifstream& mapFile,std::string line);
-		std::vector<Object>& GetObjects(){ return objectVector; }
+		std::vector<Object>& GetObjects(){ return m_objectVector; }
 
 		const std::vector<float>& GetVertecies()  { return m_vertecies; }
 		const std::vector<float>& GetTexelVector() { return m_texelCoords; }
@@ -21,7 +21,7 @@ class OBJLevel
 		void AppendTexel(std::string source);
 		void AppendNormal(std::string source);
 	
-		std::vector<Object> objectVector;
+		std::vector<Object> m_objectVector;
 
 		std::vector<float> m_vertecies;
 		std::vector<float> m_texelCoords;

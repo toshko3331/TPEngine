@@ -172,7 +172,7 @@ OBJLevel::OBJLevel(std::string objFile)
 			//Checking agianst intializing an empty object.
 			if(object.GetObjectName() != "" && m_vertecies.size() != 0 && object.GetFaceVector().size() != 0 && m_texelCoords.size() != 0)
 			{
-				objectVector.push_back(object);
+				m_objectVector.push_back(object);
 				//Basically a saftey check for EOF.
 				if(line != "")
 				{
