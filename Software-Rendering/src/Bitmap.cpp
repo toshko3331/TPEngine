@@ -9,7 +9,7 @@ Bitmap::Bitmap(int width,int height) : m_width(width), 	m_height(height)
 	Bitmap::Clear(128);
 }
 
-Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true)), m_height(GetImageDimension(filePath,false))
+Bitmap::Bitmap(std::string filePath)
 {	
 	unsigned char pngSigniture[8];
 	//Opening the file in binary reading mode.
@@ -24,6 +24,7 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
 	if(png_sig_cmp(pngSigniture,0,8))
 	{
 		ErrorReport::WriteToLog(filePath + std::string(" is not a PNG type file."));
+		fclose(texture);
 		return;
 	}
 	//Intialize the first struct.
@@ -31,6 +32,7 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
 	if(pngReadStruct == NULL)
 	{
 		ErrorReport::WriteToLog(std::string("Read structure for ") + filePath + std::string(" was not initalized correctly."));
+		fclose(texture);
 		return;
 	}
 	//Intialize the second struct.
@@ -38,12 +40,16 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
 	if(pngInfoStruct == NULL)
 	{
 		ErrorReport::WriteToLog(std::string("Info structure for ") + filePath + std::string(" was not initalized correctly."));
+		png_destroy_read_struct(&pngReadStruct,nullptr,nullptr);
+		fclose(texture);
 		return;
 	}
 	//Any I/O problem call this.
 	if(setjmp(png_jmpbuf(pngReadStruct)))
 	{
 		ErrorReport::WriteToLog(std::string("Error during I/O of file ") + filePath);
+		png_destroy_read_struct(&pngReadStruct,&pngInfoStruct,nullptr);
+		fclose(texture);
 		return;
 	}
 	//Initalizing standard C I/O stream
@@ -53,6 +59,9 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
 	//Reading information before we get to the good stuff, the image data.
 	png_read_info(pngReadStruct,pngInfoStruct);
 	
+	m_width = png_get_image_width(pngReadStruct,pngInfoStruct);
+	m_height = png_get_image_height(pngReadStruct,pngInfoStruct);
+
 	//Allocating the space needed to store the pixels.
 	m_pixels = new Uint32[m_width * m_height];
 
@@ -85,7 +94,8 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
         for (int i = 0;i < m_height; i++)
 	{
                 free(row_pointers[i]);
-	}        
+	}
+	png_destroy_read_struct(&pngReadStruct,&pngInfoStruct,nullptr);
 	free(row_pointers);
 	fclose(texture);
 }
@@ -111,60 +121,4 @@ void Bitmap::CopyTexelToPixel(int texelXCoord,int texelYCoord,int pixelXCoord,in
 {
 	m_pixels[pixelYCoord * m_width + pixelXCoord] = texture->GetPixel((texelYCoord * texture->GetWidth()) + texelXCoord);
 }
-
-//Static member function to get the dimensions of the image.
-int Bitmap::GetImageDimension(std::string filePath,bool getWidth)
-{
-	/* For commented version, refer to the texture constructor. */
-	unsigned char pngSigniture[8];
-	FILE* texture = fopen(filePath.c_str(), "rb");
-	if(!texture)
-	{
-		ErrorReport::WriteToLog(filePath + std::string(" failed to be loaded during dimension gathering."));
-		return -1;
-	}
-	fread(pngSigniture,1,8,texture);
-	if(png_sig_cmp(pngSigniture,0,8))
-	{
-		ErrorReport::WriteToLog(filePath + std::string(" is was not recognized as a PNG during dimension gathering."));
-		return -1;
-	}
-	if(!texture)
-	{
-		ErrorReport::WriteToLog(filePath + std::string(" failed to be loaded during dimension gathering."));
-		return -1;
-	}
-	png_structp pngReadStruct = png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
-	if(pngReadStruct == NULL)
-	{
-		ErrorReport::WriteToLog(std::string("Read structure for ") + filePath+ std::string(" during dimension gathering was not initalized correctly."));
-		return -1;
-	}
-	png_infop pngInfoStruct = png_create_info_struct(pngReadStruct);
-	if(pngInfoStruct == NULL)
-	{
-		ErrorReport::WriteToLog(std::string("Info structure for ") + filePath + std::string(" during dimension gathering was not initalized correctly."));
-		return -1;
-	}
-	if(setjmp(png_jmpbuf(pngReadStruct)))
-	{
-		ErrorReport::WriteToLog(std::string("Error during I/O of file ") + filePath + std::string(" during dimension gathering."));
-		return -1;
-	}
-	png_init_io(pngReadStruct,texture);
-	png_set_sig_bytes(pngReadStruct,8);
-	png_read_info(pngReadStruct,pngInfoStruct);
-	if(getWidth == true)
-	{
-		int width = png_get_image_width(pngReadStruct,pngInfoStruct);
-		fclose(texture);
-		return width;
-	}else
-	{
-		int height = png_get_image_height(pngReadStruct,pngInfoStruct);
-		fclose(texture);
-		return height;
-	}
-}
-
 

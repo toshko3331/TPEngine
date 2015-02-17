@@ -17,7 +17,7 @@ class Bitmap
 		Uint32* GetPixels(){ return m_pixels; } 
 	private:
 		static int GetImageDimension(std::string filePath,bool getWidth);
-		const int m_width;
-		const int m_height;
+		int m_width;
+		int m_height;
 		Uint32* m_pixels;
 };
