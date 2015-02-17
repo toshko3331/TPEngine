@@ -156,7 +156,7 @@ int Bitmap::GetImageDimension(std::string filePath,bool getWidth)
 	png_read_info(pngReadStruct,pngInfoStruct);
 	if(getWidth == true)
 	{
-		int width = png_get_image_height(pngReadStruct,pngInfoStruct);
+		int width = png_get_image_width(pngReadStruct,pngInfoStruct);
 		fclose(texture);
 		return width;
 	}else
