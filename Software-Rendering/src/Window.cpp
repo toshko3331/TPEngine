@@ -38,10 +38,12 @@ Window::Window(const char* title,int x,int y,int width, int height,Uint32 flags)
 
 }
 
-Window::~Window()
+void Window::destroy()
 {
 	//Properly dispose of everything that we have intialized.
 	SDL_DestroyTexture(m_texture);
 	SDL_DestroyRenderer(m_renderer);
 	SDL_DestroyWindow(m_window);
 }
+
+

@@ -8,7 +8,7 @@ class Window
 
 	public:
 		Window(const char* title,int x,int y,int width, int height,Uint32 flags);
-		~Window();
+		void destroy();
 		//Getters
 		SDL_Window* GetWindow() {return m_window; }
 		SDL_Renderer* GetRenderer() {return m_renderer;}
