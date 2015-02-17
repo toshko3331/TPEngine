@@ -82,12 +82,8 @@ int main(int argc, char ** argv)
 		SDL_RenderCopy(window.GetRenderer(), window.GetTexture(), NULL, NULL);
 	        SDL_RenderPresent(window.GetRenderer());
        	}
-
-
-	 
-	SDL_DestroyTexture(window.GetTexture());
-	SDL_DestroyRenderer(window.GetRenderer());
-	SDL_DestroyWindow(window.GetWindow());
+	
+	window.destroy(); 
 	SDL_Quit(); 
 	return 0;
 }
