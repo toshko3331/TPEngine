@@ -16,34 +16,34 @@ Bitmap::Bitmap(std::string filePath) : m_width(GetImageDimension(filePath,true))
 	FILE* texture = fopen(filePath.c_str(), "rb");
 	if(!texture)
 	{
-		ErrorReport::WriteToLog(filePath.append(" failed to be loaded."));
+		ErrorReport::WriteToLog(filePath + std::string(" failed to be loaded."));
 		return;
 	}
 	fread(pngSigniture,1,8,texture);
 	//Checking if the file is of type PNG.
 	if(png_sig_cmp(pngSigniture,0,8))
 	{
-		ErrorReport::WriteToLog(filePath.append(" is not a PNG type file."));
+		ErrorReport::WriteToLog(filePath + std::string(" is not a PNG type file."));
 		return;
 	}
 	//Intialize the first struct.
 	png_structp pngReadStruct = png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
 	if(pngReadStruct == NULL)
 	{
-		ErrorReport::WriteToLog(std::string("Read structure for ").append(filePath).append(" was not initalized correctly."));
+		ErrorReport::WriteToLog(std::string("Read structure for ") + filePath + std::string(" was not initalized correctly."));
 		return;
 	}
 	//Intialize the second struct.
 	png_infop pngInfoStruct = png_create_info_struct(pngReadStruct);
 	if(pngInfoStruct == NULL)
 	{
-		ErrorReport::WriteToLog(std::string("Info structure for ").append(filePath).append(" was not initalized correctly."));
+		ErrorReport::WriteToLog(std::string("Info structure for ") + filePath + std::string(" was not initalized correctly."));
 		return;
 	}
 	//Any I/O problem call this.
 	if(setjmp(png_jmpbuf(pngReadStruct)))
 	{
-		ErrorReport::WriteToLog(std::string("Error during I/O of file ").append(filePath));
+		ErrorReport::WriteToLog(std::string("Error during I/O of file ") + filePath);
 		return;
 	}
 	//Initalizing standard C I/O stream
@@ -120,35 +120,35 @@ int Bitmap::GetImageDimension(std::string filePath,bool getWidth)
 	FILE* texture = fopen(filePath.c_str(), "rb");
 	if(!texture)
 	{
-		ErrorReport::WriteToLog(filePath.append(" failed to be loaded during dimension gathering."));
+		ErrorReport::WriteToLog(filePath + std::string(" failed to be loaded during dimension gathering."));
 		return -1;
 	}
 	fread(pngSigniture,1,8,texture);
 	if(png_sig_cmp(pngSigniture,0,8))
 	{
-		ErrorReport::WriteToLog(filePath.append(" is was not recognized as a PNG during dimension gathering."));
+		ErrorReport::WriteToLog(filePath + std::string(" is was not recognized as a PNG during dimension gathering."));
 		return -1;
 	}
 	if(!texture)
 	{
-		ErrorReport::WriteToLog(filePath.append(" failed to be loaded during dimension gathering."));
+		ErrorReport::WriteToLog(filePath + std::string(" failed to be loaded during dimension gathering."));
 		return -1;
 	}
 	png_structp pngReadStruct = png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
 	if(pngReadStruct == NULL)
 	{
-		ErrorReport::WriteToLog(std::string("Read structure for ").append(filePath).append(" during dimension gathering was not initalized correctly."));
+		ErrorReport::WriteToLog(std::string("Read structure for ") + filePath+ std::string(" during dimension gathering was not initalized correctly."));
 		return -1;
 	}
 	png_infop pngInfoStruct = png_create_info_struct(pngReadStruct);
 	if(pngInfoStruct == NULL)
 	{
-		ErrorReport::WriteToLog(std::string("Info structure for ").append(filePath).append(" during dimension gathering was not initalized correctly."));
+		ErrorReport::WriteToLog(std::string("Info structure for ") + filePath + std::string(" during dimension gathering was not initalized correctly."));
 		return -1;
 	}
 	if(setjmp(png_jmpbuf(pngReadStruct)))
 	{
-		ErrorReport::WriteToLog(std::string("Error during I/O of file ").append(filePath).append(" during dimension gathering."));
+		ErrorReport::WriteToLog(std::string("Error during I/O of file ") + filePath + std::string(" during dimension gathering."));
 		return -1;
 	}
 	png_init_io(pngReadStruct,texture);
