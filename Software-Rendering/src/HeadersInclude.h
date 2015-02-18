@@ -22,5 +22,6 @@
 #include "Edge.h"
 #include "Object.h"
 #include "OBJLevel.h"
+#include "Textures.h"
 #include "Rasterizer.h"
 #endif
