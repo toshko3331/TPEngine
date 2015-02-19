@@ -73,8 +73,7 @@ void Rasterizer::ClipPart(std::vector<Vertex>& vertices, int index, float CF, st
 
 void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object* object)
 {
-	//TODO: When textures can be read from files auto determine them by calling "object.GetTextureName()".
-	m_texture = m_textures.GetTextureByName("res/64x64.png");
+	m_texture = m_textures.GetTextureByName(object->GetTextureName());
 	
 	if(m_texture == NULL)
 	{
