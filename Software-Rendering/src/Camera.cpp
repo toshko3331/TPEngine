@@ -48,7 +48,7 @@ void Camera::UpdateCamera(SDL_Event* event)
 		m_xRotation += xDifference;
 		m_yRotation += yDifference;
 
-		std::cout << "X: " << currentX << "Y: " << currentY << std::endl;
+	//	std::cout << "X: " << currentX << "Y: " << currentY << std::endl;
 
 		if(yDifference < 0 && xDifference < 0){
 			m_rotation = Vector3f(m_rotation.GetX() + -1 * sensitivity,m_rotation.GetY() + -1 * sensitivity,0);	
