@@ -79,7 +79,6 @@ std::string OBJLevel::GetNextLine(std::ifstream& mapFile,std::string line)
 {
 	//By using this method, we can support comments in the fileformat. We also skip 's' because we are not using smoothing.
 	do{
-		//std::cout << line << std::endl;
 		getline(mapFile,line);
 	}while(line.compare(0,1,"s",0,1) == 0 || line.compare(0,1,"#",0,1) == 0);
 	
@@ -100,33 +99,28 @@ OBJLevel::OBJLevel(std::string objFile)
 	{
 		while (getline(mapFile,line))
 		{
-			
-			
 			//Initial check since getline() doesnt do a check.
 			if(line.compare(0,1,"s",0,1) == 0 || line.compare(0,1,"#",0,1) == 0)
 			{
 				line = GetNextLine(mapFile,line);
-				//std::cout << "I entered here" << std::endl;
 			}
 			
-			Object object;
+			Object* object = new Object();
 			
 			if(firstPass)
 			{
 				if(line.compare(0,1,"o",0,1) == 0)
 				{
 					//Set object's  'name' to that of the parmater in 'o'.
-					object.SetObjectName(line.substr(2));
+					object->SetObjectName(line.substr(2));
 					line = GetNextLine(mapFile,line);
 					firstPass = false;
 				}
 			}else
 			{
 				//Set object's 'name'.
-				object.SetObjectName(name);
+				object->SetObjectName(name);
 			}
-			
-			//std::cout << line << std::endl;
 			if(line.compare(0,2,"v ",0,2) == 0)
 			{
 				
@@ -137,7 +131,6 @@ OBJLevel::OBJLevel(std::string objFile)
 					line = GetNextLine(mapFile,line);
 				}
 			}
-			
 			if(line.compare(0,2,"vt",0,2) == 0)
 			{
 				//Set object's texel to that of the parmater in 'vt'.
@@ -147,7 +140,6 @@ OBJLevel::OBJLevel(std::string objFile)
 					AppendTexel(line);
 					line = GetNextLine(mapFile,line);
 				}	
-				//std::cout << object.GetRawVertexVector().at(0) << std::endl; 
 			}
 			if(line.compare(0,2,"vn",0,2) == 0)
 			{
@@ -164,13 +156,13 @@ OBJLevel::OBJLevel(std::string objFile)
 				while(line.compare(0,1,"f",0,1) == 0)
 				{
 					//Set object's vertecies to that of the parmater in 'v'.
-					AppendFace(&object,line);
+					AppendFace(object,line);
 					line = GetNextLine(mapFile,line);
 				}
 			}
 			
 			//Checking agianst intializing an empty object.
-			if(object.GetObjectName() != "" && m_vertecies.size() != 0 && object.GetFaceVector().size() != 0 && m_texelCoords.size() != 0)
+			if(object->GetObjectName() != "" && m_vertecies.size() != 0 && object->GetFaceVector().size() != 0 && m_texelCoords.size() != 0)
 			{
 				m_objectVector.push_back(object);
 				//Basically a saftey check for EOF.
@@ -183,8 +175,16 @@ OBJLevel::OBJLevel(std::string objFile)
 	}else
 	{
 		ErrorReport::WriteToLog("Could not open .obj file.");
-		exit(EXIT_FAILURE);
-		
+		return;	
 	}
 	mapFile.close();
+}
+
+OBJLevel::~OBJLevel()
+{
+	//Always make sure we do proper clean up, don't want any memory leaks ^^
+	for(unsigned int i = 0; i < m_objectVector.size();i++)
+	{
+		delete m_objectVector.at(i);
+	}
 }

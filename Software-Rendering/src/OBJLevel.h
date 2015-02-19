@@ -3,25 +3,25 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <stdlib.h>
 
 class OBJLevel
 {
 	public:
 		OBJLevel(std::string filename);
-		std::string GetNextLine(std::ifstream& mapFile,std::string line);
-		std::vector<Object>& GetObjects(){ return m_objectVector; }
+		~OBJLevel();
+	 	std::vector<Object*>& GetObjects(){ return m_objectVector; }
 
 		const std::vector<float>& GetVertecies()  { return m_vertecies; }
 		const std::vector<float>& GetTexelVector() { return m_texelCoords; }
 		const std::vector<float>& GetNormals() { return m_normals; }
 	private:
+		std::string GetNextLine(std::ifstream& mapFile,std::string line);
 		void AppendVertex(std::string source);
 		void AppendFace(Object* object, std::string source);
 		void AppendTexel(std::string source);
 		void AppendNormal(std::string source);
 	
-		std::vector<Object> m_objectVector;
+		std::vector<Object*> m_objectVector;
 
 		std::vector<float> m_vertecies;
 		std::vector<float> m_texelCoords;
