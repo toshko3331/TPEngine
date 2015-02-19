@@ -59,7 +59,6 @@ void OBJLevel::AssignTexture(Object* object,std::string materialName)
 		bool quitWhile = false;
 		while(getline(m_MTLFile,line))
 		{
-			std::cout << line << std::endl;	
 			if(line.compare(std::string("newmtl ") + materialName) == 0)
 			{
 				quitWhile = true;	
@@ -71,7 +70,6 @@ void OBJLevel::AssignTexture(Object* object,std::string materialName)
 			//std::cout << line << std::endl;
 			while(getline(m_MTLFile,line))
 			{
-				std::cout << "Getting Called from 2nd while: " << line << std::endl;
 				if(line.compare(0,6,"map_Kd") == 0)
 				{
 					object->SetTextureName(line.substr(7,std::string::npos));
