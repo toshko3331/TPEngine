@@ -11,12 +11,12 @@ void Object::AddFace(int face)
 	m_faces.push_back(face);
 }
 
-void Object::SetObjectName(std::string objectName)
+void Object::SetObjectName(const std::string objectName)
 {
 	m_objectName = objectName;
 }
 
-void Object::SetTextureName(std::string textureName)
+void Object::SetTextureName(const std::string textureName)
 {
 	m_textureName = textureName;
 }

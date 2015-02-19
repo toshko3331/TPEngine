@@ -8,11 +8,11 @@ class Object
 	public:
 		Object();
 		void AddFace(int face);
-		void SetObjectName(std::string objectName);
+		void SetObjectName(const std::string objectName);
 		void SetWorldPosition(float x, float y, float z);
 		void SetEulerRotation(float x, float y, float z);
 		void SetScale(float x, float y, float z);
-		void SetTextureName(std::string textureName);
+		void SetTextureName(const std::string textureName);
 		//Getters
 		std::string GetObjectName(){ return m_objectName; } 
 		std::string GetTextureName(){ return m_textureName; }
