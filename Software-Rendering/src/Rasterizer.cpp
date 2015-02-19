@@ -1,13 +1,13 @@
 #include "HeadersInclude.h"
-#include <math.h>
 #include <string.h>
 #include <float.h>
 
-Rasterizer::Rasterizer(Bitmap* bitmap,Bitmap* texture)
+Rasterizer::Rasterizer(Bitmap* bitmap,Textures& textures,OBJLevel& level) : m_textures(textures),m_level(level)
 {
 	m_zBuffer = new float[((bitmap->GetWidth()) * (bitmap->GetHeight()))];
 	m_bitmap = bitmap;
-	m_texture = texture;
+	m_texture = NULL;
+	this->ClearZBuffer();
 }
 
 Rasterizer::~Rasterizer()
@@ -71,12 +71,19 @@ void Rasterizer::ClipPart(std::vector<Vertex>& vertices, int index, float CF, st
 	}
 }
 
-void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,OBJLevel& level)
+void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object* object)
 {
+	//TODO: When textures can be read from files auto determine them by calling "object.GetTextureName()".
+	m_texture = m_textures.GetTextureByName("res/64x64.png");
 	
-	std::vector<float> raw_vertices = level.GetVertecies();
-	std::vector<int> faces = object.GetFaceVector();
-	std::vector<float> texels = level.GetTexelVector();
+	if(m_texture == NULL)
+	{
+		ErrorReport::WriteToLog("Texture could not be assinged correctly in rasterizer.");
+	}
+	
+	std::vector<float> raw_vertices = m_level.GetVertecies();
+	std::vector<int> faces = object->GetFaceVector();
+	std::vector<float> texels = m_level.GetTexelVector();
 
 	//transformationMatrix = transformationMatrix.Translate(Vector3f(4,0,0));
 	for(unsigned int i = 0;i < faces.size();i+=9)
@@ -125,7 +132,7 @@ void Rasterizer::RasterizeObjMesh(Matrix4f transformationMatrix,Object& object,O
 			}
 		}
 	
-	} 
+	}
 }
 
 void Rasterizer::RasterizeTriangle(Vertex minYVertex,Vertex midYVertex,Vertex maxYVertex)
@@ -228,7 +235,6 @@ void Rasterizer::RasterizeHorizontalLine(Edge left,Edge right,int currentY,Gradi
 	float VValue = left.GetVOverZ() + VValueXGradient * xApproxFloatError;
 	float OneOverZ = left.GetOneOverZ() + OneOverZXGradient * xApproxFloatError;
 	float zBuffer = left.GetZBuffer()  + zBufferXGradient * xApproxFloatError;
-
 	for(int currentX = xBegin;currentX < xEnd;currentX++)
 	{
 
