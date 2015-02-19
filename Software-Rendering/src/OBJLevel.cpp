@@ -48,6 +48,50 @@ void OBJLevel::AppendNormal(std::string source)
 	}	
 }
 
+
+void OBJLevel::AssignTexture(Object* object,std::string materialName)
+{
+	if(m_MTLFile.is_open())
+	{
+		materialName = materialName.substr(7,std::string::npos);
+		std::string line("");
+		//Basically a variable so we can tell if the while loop exited succesfully.
+		bool quitWhile = false;
+		while(getline(m_MTLFile,line))
+		{
+			std::cout << line << std::endl;	
+			if(line.compare(std::string("newmtl ") + materialName) == 0)
+			{
+				quitWhile = true;	
+				break;
+			}	
+		}
+		if(quitWhile == true)
+		{
+			//std::cout << line << std::endl;
+			while(getline(m_MTLFile,line))
+			{
+				std::cout << "Getting Called from 2nd while: " << line << std::endl;
+				if(line.compare(0,6,"map_Kd") == 0)
+				{
+					object->SetTextureName(line.substr(7,std::string::npos));
+					break;
+				}
+			}
+		}
+		else
+		{
+			ErrorReport::WriteToLog(materialName + std::string(" was not found in material file."));
+			//TODO:Assign default texture.
+		}
+	}else
+	{
+		//TODO:Assign default texture.
+		ErrorReport::WriteToLog("MTL file is not open for extraction of texture name.");
+		return;
+	}
+}
+
 void OBJLevel::AppendFace(Object* object,std::string source)
 {
 	for(int i = 0; i < 3;i++)
@@ -107,6 +151,11 @@ OBJLevel::OBJLevel(std::string objFile)
 			
 			Object* object = new Object();
 			
+			if(line.compare(0,6,"mtllib",0,6) == 0)
+			{
+				m_MTLFile.open(line.substr(7,std::string::npos).c_str(),std::fstream::in);
+			}
+			//We have to do this silly thing with the firstPass boolean because of the getline() function and how it does no checking.
 			if(firstPass)
 			{
 				if(line.compare(0,1,"o",0,1) == 0)
@@ -116,7 +165,8 @@ OBJLevel::OBJLevel(std::string objFile)
 					line = GetNextLine(mapFile,line);
 					firstPass = false;
 				}
-			}else
+			}
+			else
 			{
 				//Set object's 'name'.
 				object->SetObjectName(name);
@@ -150,6 +200,11 @@ OBJLevel::OBJLevel(std::string objFile)
 					line = GetNextLine(mapFile,line);
 				}
 			}
+			if(line.compare(0,6,"usemtl",0,6) == 0)
+			{
+				AssignTexture(object,line);
+				line = GetNextLine(mapFile,line);
+			}
 			if(line.compare(0,1,"f",0,1) == 0)
 			{
 				//Set object's face coordinates to the acoording coordinates.
@@ -177,11 +232,16 @@ OBJLevel::OBJLevel(std::string objFile)
 		ErrorReport::WriteToLog("Could not open .obj file.");
 		return;	
 	}
+	m_MTLFile.close();
 	mapFile.close();
 }
 
 OBJLevel::~OBJLevel()
 {
+	if(m_MTLFile.is_open())
+	{
+		m_MTLFile.close();
+	}
 	//Always make sure we do proper clean up, don't want any memory leaks ^^
 	for(unsigned int i = 0; i < m_objectVector.size();i++)
 	{

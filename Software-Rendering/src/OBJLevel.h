@@ -20,11 +20,11 @@ class OBJLevel
 		void AppendFace(Object* object, std::string source);
 		void AppendTexel(std::string source);
 		void AppendNormal(std::string source);
-	
+		void AssignTexture(Object* object,const std::string materialName);	
 		std::vector<Object*> m_objectVector;
 
 		std::vector<float> m_vertecies;
 		std::vector<float> m_texelCoords;
 		std::vector<float> m_normals;
-	
+		std::ifstream m_MTLFile;
 };
