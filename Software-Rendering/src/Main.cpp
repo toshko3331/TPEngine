@@ -1,9 +1,5 @@
 #include <iostream>
 #include "HeadersInclude.h"
-//Temporary include calls
-#include <time.h>
-#include <math.h>
-//End of temporary include calls
 
 #define WIDTH 1200 
 #define HEIGHT 800 
@@ -26,21 +22,15 @@ int main(int argc, char ** argv)
 	bool quit = false;
 	SDL_Event event;
 	//// Temporary Variables for Testing Code  ///	
-	srand(time(NULL));
 	//Load the level and it's objects.
-	OBJLevel level("monkey.obj");	
+	OBJLevel level("monkey.obj");
+	//Load all of the textures.
+	std::vector<std::string> textureNames;
+	textureNames.push_back("64x64.png");
+	Textures textures(textureNames,"res/");
 	//Get the objects from the level.
-	std::vector<Object>& objects = level.GetObjects();
-	//Load all textures through the bitmap class, but for now use the random texture.
-	Bitmap texture = Bitmap(32,32);
-	for(int i = 0;i < texture.GetHeight();i++)
-	{
-		for(int j = 0;j < texture.GetWidth();j++)
-		{
-			texture.SetPixel(j,i,rand()%255,rand()%255,rand()%255,rand()%255);	
-		}	
-	}
-	Rasterizer rasterizer = Rasterizer(&pixels,&texture);
+	std::vector<Object*>& objects = level.GetObjects();
+	Rasterizer rasterizer = Rasterizer(&pixels,textures,level);
 	//// End of Temporary Variables ///
 	Camera camera(WIDTH,70,(float)pixels.GetWidth()/pixels.GetHeight(),0.1,1000,Matrix4f().InitializeIdentity().Translate(Vector3f(0,0,3)));
 	
@@ -61,7 +51,7 @@ int main(int argc, char ** argv)
 		pixels.Clear(128);		
 		for(unsigned int i = 0;i < objects.size();i++)
 		{
-			rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(i),level);
+			rasterizer.RasterizeObjMesh(camera.GetMatrix(),objects.at(i));
 		}
 		rasterizer.ClearZBuffer();
 		//1.Events
