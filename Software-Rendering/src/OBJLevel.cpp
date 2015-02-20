@@ -223,7 +223,9 @@ OBJLevel::OBJLevel(std::string objFile)
 				{
 					name = line.substr(2);
 				}
+				continue;
 			}
+			delete object;
 		}
 	}else
 	{
