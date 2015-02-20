@@ -152,6 +152,7 @@ OBJLevel::OBJLevel(std::string objFile)
 			if(line.compare(0,6,"mtllib",0,6) == 0)
 			{
 				m_MTLFile.open(line.substr(7,std::string::npos).c_str(),std::fstream::in);
+				line = GetNextLine(mapFile,line);
 			}
 			//We have to do this silly thing with the firstPass boolean because of the getline() function and how it does no checking.
 			if(firstPass)
@@ -225,6 +226,7 @@ OBJLevel::OBJLevel(std::string objFile)
 				}
 				continue;
 			}
+			//Just incase anything slips, we want to make sure not to cause any memory leaks.
 			delete object;
 		}
 	}else
