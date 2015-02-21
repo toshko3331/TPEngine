@@ -25,6 +25,15 @@ Vector4f Vector4f::Lerp(Vector4f x,float lerpAmount)
 	return Vector4f(((x - *this) * lerpAmount) + *this);
 }
 
+Vector4f Vector4f::CrossProduct(Vector4f vec)
+{
+	float	x = vec.GetX();
+	float	y = vec.GetY();
+	float	z = vec.GetZ();
+
+	return Vector4f(m_y * z - m_z * y,m_z * x - m_x * z,m_x * y - m_y * x,0);
+}
+
 //					//
 //		Vector Arithmetic	//
 //					//

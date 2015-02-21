@@ -20,6 +20,7 @@ class Vector4f{
 		Vector4f GetNormalized();
 		//Methods
 		Vector4f Lerp(Vector4f x,float lerpAmount);
+		Vector4f CrossProduct(Vector4f vec);
 	private:
 		float m_x;
 		float m_y;

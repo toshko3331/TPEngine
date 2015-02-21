@@ -22,6 +22,15 @@ Vector3f Vector3f::Lerp(Vector3f x,float lerpAmount)
 	return Vector3f(((x - *this) * lerpAmount) + *this);
 }
 
+Vector3f Vector3f::CrossProduct(Vector3f vec)
+{
+	float	x = vec.GetX();
+	float	y = vec.GetY();
+	float	z = vec.GetZ();
+
+	return Vector3f(m_y * z - m_z * y,m_z * x - m_x * z,m_x * y - m_y * x);
+}
+
 //				//
 //	Vector Arithmetic 	//
 //				//

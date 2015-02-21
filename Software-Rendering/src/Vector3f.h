@@ -22,7 +22,7 @@ class Vector3f
 		Vector3f GetNormalized();
 		//Methods
 		Vector3f Lerp(Vector3f x,float lerpAmount);
-
+		Vector3f CrossProduct(Vector3f vec);
 	private:
 		float m_x;
 		float m_y;
