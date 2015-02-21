@@ -2,18 +2,28 @@
 
 Vector4f::Vector4f(float x,float y,float z,float w)
 {
-
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	m_w = w;
 }
 
+float Vector4f::GetLength()
+{
+	return (float)sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);		
+}
+
+Vector4f Vector4f::GetNormalized()
+{
+	float length = this->GetLength();
+	
+	return Vector4f(m_x/length,m_y/length,m_z/length,m_w/length); 
+}
+
 Vector4f Vector4f::Lerp(Vector4f x,float lerpAmount)
 {
 	return Vector4f(((x - *this) * lerpAmount) + *this);
 }
-
 
 //					//
 //		Vector Arithmetic	//
@@ -42,9 +52,3 @@ Vector4f Vector4f::operator*(const float scalar)
 {
 	return Vector4f(m_x*scalar , m_y*scalar , m_z*scalar , m_w*scalar) ;
 }
-/* This is probably not correct.
-Vector4f Vector4f::GetNormal(Vector4f firstVector,Vector4f secondVector)
-{
-	return firstVector * secondVector;
-}
-*/

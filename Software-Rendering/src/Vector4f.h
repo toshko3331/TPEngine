@@ -1,12 +1,11 @@
 #pragma once
-
+#include <math.h>
 
 class Vector4f{
 		
 	public:
 		Vector4f(float x,float y,float z,float w);
-		Vector4f Lerp(Vector4f x,float lerpAmount);
-		//Operator Overloading to make it easier to work with the vectors in general.                                                          
+		//Operator Overloading to make it easier to work with the vectors in general.
 		Vector4f operator+(const Vector4f& vec);
 		Vector4f operator-(const Vector4f& vec);
 		Vector4f operator*(const Vector4f& multVec);
@@ -16,8 +15,11 @@ class Vector4f{
 		float GetY() {return m_y;}
 		float GetZ() {return m_z;}
 		float GetW() {return m_w;}
+	 
+		float GetLength();
+		Vector4f GetNormalized();
 		//Methods
-//Probaby not correct		Vector4f GetNormal(Vector4f firstVector,Vector4f secondVector);	
+		Vector4f Lerp(Vector4f x,float lerpAmount);
 	private:
 		float m_x;
 		float m_y;

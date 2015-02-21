@@ -1,12 +1,10 @@
 #pragma once
-#include "HeadersInclude.h"
-
+#include <math.h>
 
 class Vector3f
 {
 	public:
 		Vector3f(float x,float y,float z);
-		Vector3f Lerp(Vector3f x,float lerpAmount);
 
 		//Operator Overloading.
 		Vector3f operator+(const Vector3f& vec);	
@@ -19,7 +17,11 @@ class Vector3f
 		float GetX() {return m_x;}
 		float GetY() {return m_y;}
 		float GetZ() {return m_z;}
-		/////////////
+		
+		float GetLength();
+		Vector3f GetNormalized();
+		//Methods
+		Vector3f Lerp(Vector3f x,float lerpAmount);
 
 	private:
 		float m_x;

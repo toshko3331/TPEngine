@@ -1,9 +1,20 @@
-#include "HeadersInclude.h"
-
+#include "Vector3f.h"
 
 Vector3f::Vector3f(float x,float y,float z) : m_x(x), m_y(y), m_z(z)
 {
 
+}
+
+float Vector3f::GetLength()
+{
+	return (float)sqrt(m_x * m_x + m_y * m_y + m_z * m_z);		
+}
+
+Vector3f Vector3f::GetNormalized()
+{
+	float length = this->GetLength();
+	
+	return Vector3f(m_x/length,m_y/length,m_z/length); 
 }
 
 Vector3f Vector3f::Lerp(Vector3f x,float lerpAmount)
@@ -11,8 +22,9 @@ Vector3f Vector3f::Lerp(Vector3f x,float lerpAmount)
 	return Vector3f(((x - *this) * lerpAmount) + *this);
 }
 
-
-//Overloading all operators that can make sense when using vectors.
+//				//
+//	Vector Arithmetic 	//
+//				//
 
 //Adition of vectors.
 Vector3f Vector3f::operator+(const Vector3f& vec)

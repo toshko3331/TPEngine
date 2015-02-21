@@ -1,9 +1,21 @@
-#include "HeadersInclude.h"
+#include "Vector2f.h"
 
 Vector2f::Vector2f(float x, float y)
 {
 	m_x = x;
 	m_y = y;
+}
+
+float Vector2f::GetLength()
+{
+	return (float)sqrt(m_x * m_x + m_y * m_y);		
+}
+
+Vector2f Vector2f::GetNormalized()
+{
+	float length = this->GetLength();
+
+	return Vector2f(m_x/length,m_y/length); 
 }
 
 Vector2f Vector2f::Lerp(Vector2f x,float lerpAmount)
