@@ -10,7 +10,7 @@ class Vector3f
 		Vector3f operator+(const Vector3f& vec);	
 		Vector3f operator-(const Vector3f& vec);
 		Vector3f operator*(const Vector3f& multVec);
-		Vector3f operator*(const int scalar);
+		Vector3f operator*(const float scalar);
 		//TO BE IMPLIMENTED:=+,=-,=*(Dot Product),=*(Scalar) . 
 
 		//Getters////
