@@ -1,25 +1,27 @@
 #pragma once
 #include "HeadersInclude.h"
+#include "glm/glm.hpp"
 
 class Camera{
 	public:
-		//Perspective camera.
-		Camera(int screenWidth,int fov,float aspectRatio,float zNear,float zFar,Matrix4f transformation = Matrix4f().InitializeIdentity());
-		//Orthographic camera.
-		Camera(int width, int height, float zFar, float zNear,Matrix4f transformation = Matrix4f().InitializeIdentity());
-		void UpdateCamera(SDL_Event* event);
+		Camera(const float fov,const float aspectRatio, const float nearPlane,const float farPlane,const float* deltaTime);
+		void UpdateCamera(const SDL_Event* event,const int halfWidth,const int halfHeight);
 		//Getters
 		Matrix4f GetMatrix();
 	private:
-		
-		int m_screenWidth;
-		Matrix4f m_projectionMatrix;
-		Sint32 m_previousX;
-		Sint32 m_previousY;
-		
-		float m_xRotation;
-		float m_yRotation;
+		const Uint8* m_keyboardState = SDL_GetKeyboardState(NULL);
 
-		Vector3f m_rotation = Vector3f(0,0,0);
-		Vector3f m_position = Vector3f(0,0,5);
+		int m_mouseXPosition,m_mouseYPosition;
+	
+		float m_xAngle = 3.14f;
+		float m_yAngle = 0.0f;
+
+		glm::vec3 m_positionVector = glm::vec3(0,0,5);
+	
+		glm::vec3 m_directionVector = glm::vec3(0,0,1);
+		glm::vec3 m_rightVector = glm::vec3(1,0,0);
+		glm::vec3 m_upVector = glm::vec3(0,1,0);
+	
+		glm::mat4 m_projectionMatrix;
+		const float* m_deltaTime;
 };

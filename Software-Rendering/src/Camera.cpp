@@ -1,113 +1,76 @@
 #include "HeadersInclude.h"
+#include "glm/glm.hpp"
+#define GLM_FORCE_RADIANS
+#define PI 3.14159265359
+#include "glm/gtx/transform.hpp"
+#include "util.h"
 
-//Perspective camera.
-Camera::Camera(int screenWidth,int fov,float aspectRatio,float zNear,float zFar,Matrix4f transformation ) : m_projectionMatrix(Matrix4f().InitializeIdentity().PerspectiveProjection(fov,aspectRatio,zNear,zFar))
+Camera::Camera(const float fov,const float aspectRatio,const float nearPlane,const float farPlane,const float* deltaTime): 
+        m_projectionMatrix(glm::perspective((float)((fov * PI)/ 180),aspectRatio,nearPlane,farPlane)),m_deltaTime(deltaTime)
 {
-	m_xRotation = 0;
-	m_yRotation = 0;
-	m_screenWidth = screenWidth;
-	//TODO:Do arithmetic with the transofrmation matrix to the rotation and coordinate vectors.
-
-}
-
-
-//Orthographic camera.
-//TODO:Implement this properly.
-Camera::Camera(int width, int height, float zFar, float zNear,Matrix4f transformation) : m_projectionMatrix(Matrix4f().InitializeIdentity().OrthographicProjection(width,height,zFar,zNear))
-{
-
-	m_xRotation = 0;
-	m_yRotation = 0;
-	//TODO:Do arithemtic with the transformation matrix tot he rotation and coordiante vectors.
+	
 
 }
 
 Matrix4f Camera::GetMatrix()
 {
-	//TODO:When quaternions are implemented, move the translation as the last transformation of the matrix being multiplied.
-	return m_projectionMatrix * Matrix4f().InitializeIdentity().Translate(m_position).RotateAroundX(m_rotation.GetX()).RotateAroundY(m_rotation.GetY()).RotateAroundZ(m_rotation.GetZ());
+	Matrix4f ProjectionMatrix = Matrix4f().InitializeIdentity();	
+	Matrix4f ViewMatrix = Matrix4f().InitializeIdentity();
+	ProjectionMatrix.Mat4ToMatrix4f(m_projectionMatrix);
+
+	glm::mat4 lookAt = glm::lookAt(m_positionVector,m_positionVector + m_directionVector,m_upVector);
+	
+	ViewMatrix.Mat4ToMatrix4f(lookAt);
+	return ProjectionMatrix * ViewMatrix; 
+
 }
 
-void Camera::UpdateCamera(SDL_Event* event)
+void Camera::UpdateCamera(const SDL_Event* event,const int halfWidth,const int halfHeight)
 {
+
+	m_keyboardState = SDL_GetKeyboardState(NULL);
+		
+	SDL_GetMouseState(&m_mouseXPosition,&m_mouseYPosition);
+
+	float cameraSpeed = 1.0f;
+	float mouseSpeed = 0.05f; 
+	
 	if(event->type == SDL_MOUSEMOTION)
 	{
-		float sensitivity = -0.785;
-/*		//Rotation in the X-Axis
-		float camPitch = sensitivity * (m_screenHalfHeight - event->motion.x);
-		//Rotation among the Y-Axis	
-		float camYaw = sensitivity * (m_screenHalfWidth - event->motion.y);
-
-		m_rotation = Vector3f(camYaw,camPitch,0);	
-*/
-		Sint32 currentX = event->motion.x;
-		Sint32 currentY = event->motion.y;
-		Sint32 xDifference = currentX - m_previousX;
-		Sint32 yDifference = currentY - m_previousY;
-
-		m_xRotation += xDifference;
-		m_yRotation += yDifference;
-
-	//	std::cout << "X: " << currentX << "Y: " << currentY << std::endl;
-
-		if(yDifference < 0 && xDifference < 0){
-			m_rotation = Vector3f(m_rotation.GetX() + -1 * sensitivity,m_rotation.GetY() + -1 * sensitivity,0);	
-		}else if(yDifference < 0 && xDifference > 0)
-			m_rotation = Vector3f(m_rotation.GetX() + -1 * sensitivity,m_rotation.GetY() + 1 * sensitivity,0);	
-	 	else if(yDifference > 0 && xDifference < 0)
-			m_rotation = Vector3f(m_rotation.GetX() + 1 * sensitivity,m_rotation.GetY() + -1 * sensitivity,0);
-		else if(yDifference > 0 && xDifference < 0)
-			m_rotation = Vector3f(m_rotation.GetX() + 1 * sensitivity,m_rotation.GetY() + 1 * sensitivity,0);	
-		else if(yDifference == 0 && xDifference > 0)
-			m_rotation = Vector3f(m_rotation.GetX(),m_rotation.GetY() + 1 * sensitivity,0);	
-	 	else if(yDifference == 0 && xDifference < 0)
-			m_rotation = Vector3f(m_rotation.GetX(),m_rotation.GetY() + -1 * sensitivity,0);
-		else if(yDifference > 0 && xDifference == 0)
-			m_rotation = Vector3f(m_rotation.GetX() + 1 * sensitivity,m_rotation.GetY(),0);
-		else if(yDifference < 0 && xDifference == 0)
-			m_rotation = Vector3f(m_rotation.GetX() + -1 * sensitivity,m_rotation.GetY(),0);
-		else if(yDifference == 0 && xDifference == 0)
-			m_rotation = Vector3f(m_rotation.GetX(),m_rotation.GetY(),0);
-		//These following if statments allow us to keep spining infinetly with the mouse.	
-		if(currentX == 0)
+		m_xAngle += (float)(mouseSpeed * (*m_deltaTime) * (halfWidth - m_mouseXPosition));
+		m_yAngle += (float)(mouseSpeed * (*m_deltaTime) * (halfHeight - m_mouseYPosition));
+		//Guards against flipping upside down
+		if(m_yAngle >= 1)
 		{
-			currentX = m_screenWidth - 2;
-		}else if(currentX == m_screenWidth-1)
-		{
-			currentX = 1;
+			m_yAngle = 1;
 		}
-		//TODO:Eventually restrain the Y-Rotation as well.
-		m_previousX = currentX;
-		m_previousY = currentY;
-	
-	}else if (event->type == SDL_KEYDOWN)
+		else if(m_yAngle <= -1)
+		{
+			m_yAngle = -1;
+		}	
+		
+		m_directionVector = glm::vec3(cos(m_yAngle) * sin(m_xAngle),sin(m_yAngle),cos(m_yAngle) * cos(m_xAngle));
+		m_rightVector = glm::vec3(sin(m_xAngle - 3.14f/2.0f),0,cos(m_xAngle - 3.14/2.0f));
+		m_upVector = glm::cross(m_rightVector,m_directionVector);
+	}
+	if(event->type == SDL_KEYDOWN)
 	{
-
-		//Not working yet properly. We are going to need Quaternions first.
-		float speedFactor = 0.2;
-		if(event->key.keysym.sym == SDLK_w)
-        	{
-			m_position = Vector3f(m_position.GetX(),m_position.GetY(),m_position.GetZ() + speedFactor);
+		if(m_keyboardState[SDL_SCANCODE_W])
+		{
+			m_positionVector += m_directionVector * (*m_deltaTime) * cameraSpeed;
 		}
-		if(event->key.keysym.sym == SDLK_a)
+		if(m_keyboardState[SDL_SCANCODE_S])
 		{
-			m_position = Vector3f(m_position.GetX() + speedFactor,m_position.GetY(),m_position.GetZ());
+			m_positionVector -= m_directionVector * (*m_deltaTime) * cameraSpeed;
 		}
-		if(event->key.keysym.sym == SDLK_s)
+		if(m_keyboardState[SDL_SCANCODE_D])
 		{
-			m_position = Vector3f(m_position.GetX(),m_position.GetY(),m_position.GetZ() - speedFactor);
+			m_positionVector += m_rightVector * (*m_deltaTime) * cameraSpeed;
 		}
-		if(event->key.keysym.sym == SDLK_d)
+		if(m_keyboardState[SDL_SCANCODE_A])
 		{
-			m_position = Vector3f(m_position.GetX() - speedFactor,m_position.GetY(),m_position.GetZ());
-		}	
-		if(event->key.keysym.sym == SDLK_UP)
-		{
-		//	m_cameraMatrix = m_cameraMatrix.Translate(Vector3f(0,0,0.3));
+			m_positionVector -= m_rightVector * (*m_deltaTime) * cameraSpeed;
 		}
-		if(event->key.keysym.sym == SDLK_DOWN)
-		{
-		//	m_cameraMatrix = m_cameraMatrix.Translate(Vector3f(0,0,-0.3));
-		}	
 	}
 }
+
