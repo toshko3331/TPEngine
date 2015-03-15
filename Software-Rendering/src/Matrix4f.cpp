@@ -1,5 +1,6 @@
 #include "HeadersInclude.h"
 #include <math.h>
+#include "glm/glm.hpp"
 #ifndef PI
 #define PI 3.141592653589793
 #endif
@@ -11,12 +12,12 @@ Matrix4f::Matrix4f()
 
 Matrix4f Matrix4f::InitializeIdentity()
 {
-	return (Matrix4f(
+	return Matrix4f(
 	1,	0,	0,	0,
 	0,	1,	0,	0,
 	0,	0,	1,	0,
 	0,	0,	0,	1
-	));
+	);
 }
 
 Matrix4f::Matrix4f(float one, float two, float three, float four, float five ,float six, float seven, float eight, float nine, float ten, float eleven, float twelve, float thirteen, float fourteen, float fifteen, float sixteen)
@@ -37,6 +38,15 @@ Matrix4f Matrix4f::operator*(const float scalar)
 	m_matrix[0][3] * scalar,	m_matrix[1][3] * scalar,	m_matrix[2][3] * scalar,	m_matrix[3][3] * scalar
 	);
 }
+
+void Matrix4f::Mat4ToMatrix4f(const glm::mat4 matrix)
+{
+	m_matrix[0][0] = matrix[0][0]; m_matrix[0][1] = matrix[0][1]; m_matrix[0][2] = matrix[0][2]; m_matrix[0][3] = matrix[0][3];
+	m_matrix[1][0] = matrix[1][0]; m_matrix[1][1] = matrix[1][1]; m_matrix[1][2] = matrix[1][2]; m_matrix[1][3] = matrix[1][3];
+	m_matrix[2][0] = matrix[2][0]; m_matrix[2][1] = matrix[2][1]; m_matrix[2][2] = matrix[2][2]; m_matrix[2][3] = matrix[2][3];
+	m_matrix[3][0] = matrix[3][0]; m_matrix[3][1] = matrix[3][1]; m_matrix[3][2] = matrix[3][2]; m_matrix[3][3] = matrix[3][3];
+}
+
 
 Matrix4f Matrix4f::operator*(const Matrix4f matrix2)
 {
@@ -181,6 +191,18 @@ Matrix4f Matrix4f::WorldSpaceToScreenSpace(float halfWidth,float halfHeight)
 	return (*this) * screenMatrix;
 }
 
+Matrix4f Matrix4f::GetTransposed() const
+{
+
+	return Matrix4f(
+		m_matrix[0][0],m_matrix[0][1],m_matrix[0][2],m_matrix[0][3],
+		m_matrix[1][0],m_matrix[1][1],m_matrix[1][2],m_matrix[1][3],
+		m_matrix[2][0],m_matrix[2][1],m_matrix[2][2],m_matrix[2][3],
+		m_matrix[3][0],m_matrix[3][1],m_matrix[3][2],m_matrix[3][3]
+			);
+
+}
+
 float** Matrix4f::GetMatrix()
 {
 	float** matrix = new float*[4];// = new float*;
@@ -227,28 +249,5 @@ void Matrix4f::PrintToConsole()
 	std::cout << "--- "	<< 		     "\t"  <<		       "\t" 		    <<   "\t"		        << "---" << std::endl;
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

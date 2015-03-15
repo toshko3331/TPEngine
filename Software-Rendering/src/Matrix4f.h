@@ -1,5 +1,6 @@
 #pragma once
 #include "HeadersInclude.h"
+#include "glm/glm.hpp"
 
 class Matrix4f
 {
@@ -10,10 +11,12 @@ class Matrix4f
 		Matrix4f operator*(const float scalar);
 		Matrix4f operator*(const Matrix4f matrix2);
 		Vector4f operator*(Vector4f vector);
-		
+	
 		//Getters
 		float Get(int column,int row) const {return m_matrix[column][row];} 
-		//Methods
+		Matrix4f GetTransposed() const; 
+	 	//Methods
+		void Mat4ToMatrix4f(const glm::mat4 matrix);
 		Matrix4f InitializeIdentity();
 		Matrix4f Scale(Vector3f vector);
 		Matrix4f Translate(Vector3f vector);
