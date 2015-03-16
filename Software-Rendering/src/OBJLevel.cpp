@@ -57,8 +57,15 @@ void OBJLevel::AssignTexture(Object* object,std::string materialName)
 		std::string line("");
 		//Basically a variable so we can tell if the while loop exited succesfully.
 		bool quitWhile = false;
+		//TODO:Check if eof then clear the stream if so.
+		if(m_MTLFile.eof())
+		{
+			m_MTLFile.clear();
+		}
+		m_MTLFile.seekg(0,std::ios_base::beg);
 		while(getline(m_MTLFile,line))
 		{
+			std::cout << line << std::endl;
 			if(line.compare(std::string("newmtl ") + materialName) == 0)
 			{
 				quitWhile = true;	
@@ -72,6 +79,7 @@ void OBJLevel::AssignTexture(Object* object,std::string materialName)
 			{
 				if(line.compare(0,6,"map_Kd") == 0)
 				{
+					std::cout << "Texture was set!" << std::endl;
 					object->SetTextureName(line.substr(7,std::string::npos));
 					break;
 				}
