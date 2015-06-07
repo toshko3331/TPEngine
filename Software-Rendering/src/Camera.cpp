@@ -3,7 +3,6 @@
 #define GLM_FORCE_RADIANS
 #define PI 3.14159265359
 #include "glm/gtx/transform.hpp"
-#include "util.h"
 
 Camera::Camera(const float fov,const float aspectRatio,const float nearPlane,const float farPlane,const float* deltaTime): 
         m_projectionMatrix(glm::perspective((float)((fov * PI)/ 180),aspectRatio,nearPlane,farPlane)),m_deltaTime(deltaTime)
