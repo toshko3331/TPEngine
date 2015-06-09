@@ -24,10 +24,7 @@ int main(int argc, char ** argv)
 	//Load the level and it's objects.
 	OBJLevel level("Cube.obj");
 	//Load all of the textures.
-	std::vector<std::string> textureNames;
-	textureNames.push_back("64x64.png");
-	textureNames.push_back("test.png");
-	Textures textures(textureNames,"res/");
+	Textures textures("res/");
 	//Get the objects from the level.
 	std::vector<Object*>& objects = level.GetObjects();
 	Rasterizer rasterizer = Rasterizer(&pixels,textures,level);
