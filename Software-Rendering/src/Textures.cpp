@@ -1,13 +1,9 @@
 #include "HeadersInclude.h"
+#include <dirent.h>
 
-Textures::Textures(const std::vector<std::string>& files,std::string filePath)
+Textures::Textures(std::string filePath)
 {
-	for(unsigned int i = 0;i < files.size();i++)
-	{
-		std::string name = filePath + files.at(i);
-		m_textureBitmaps.push_back(new Bitmap(name));
-		m_textureNames.push_back(name);
-	}
+	LoadTexturesFromPath(filePath);
 }
 
 Textures::~Textures()
@@ -30,4 +26,30 @@ Bitmap* Textures::GetTextureByName(std::string name)
 	//TODO:Return an error texture, this way we don't have to crash the program (i.e. the source engine's red "ERROR" texture).
 	ErrorReport::WriteToLog("No texture found in texture array.");
 	exit(EXIT_FAILURE);
-}	
+}
+
+void Textures::LoadTexturesFromPath(std::string filePath)
+{
+	
+	struct dirent* readData = NULL;
+        DIR* directory = opendir(filePath.c_str());
+        while((readData = readdir(directory)) != NULL)
+        {
+                std::string filename = readData->d_name;
+                unsigned int numCharsUntilDot = filename.find_last_of('.');
+                if(numCharsUntilDot == std::string::npos) // no '.' found
+                {
+                        continue;
+                }
+                if(filename.find(EXSTENSION,numCharsUntilDot) != std::string::npos && EXSTENSION.length() + numCharsUntilDot + 1 == filename.length())
+                {
+                	std::string name = filePath + filename;
+			m_textureBitmaps.push_back(new Bitmap(name));
+			m_textureNames.push_back(name);
+			continue;
+                }
+        }
+        closedir(directory);
+}
+
+	
